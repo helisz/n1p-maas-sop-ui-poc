@@ -39,13 +39,13 @@ async function handleLogin() {
             <path d="M7 16.5l9 5.5 9-5.5" fill="none" stroke="#000000" stroke-width="1.8" opacity="0.55" stroke-linecap="round" stroke-linejoin="round" />
             <path d="M7 20l9 5.5 9-5.5" fill="none" stroke="#000000" stroke-width="1.8" opacity="0.3" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
-          <span class="text-xl font-semibold">应用运营管理门户</span>
+          <span class="text-xl font-semibold">应用运营门户 <span class="text-red-600">POC</span></span>
         </div>
       </div>
 
       <div class="relative z-10 space-y-10">
         <div class="space-y-4">
-          <h1 class="text-4xl leading-tight font-bold">智信 MaaS 应用运营管理门户</h1>
+          <h1 class="text-4xl leading-tight font-bold">智信 MaaS 应用运营门户 <span class="text-red-600">POC</span></h1>
           <p class="max-w-md text-lg leading-relaxed text-white/70">一站式企业应用运营管理解决方案，以安全为基，以高效为纲，赋能企业数字化升级。</p>
         </div>
 

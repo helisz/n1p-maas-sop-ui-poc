@@ -1,8 +1,8 @@
-# n1p-maas-esp-ui 项目 UI 功能分析报告
+# n智信MaaS应用运营门户 POC
 
 ## 一、项目概述
 
-**项目名称**：智信MaaS服务管理平台（ESP-UI）  
+**项目名称**：智信MaaS应用运营门户（SOP-UI）  
 **技术栈**：Vue 3 + TypeScript + Vue Router + Tailwind CSS + shadcn/ui 风格组件  
 **布局结构**：左侧可折叠边栏导航 + 顶部Header + 主内容区（PortalLayout）
 
