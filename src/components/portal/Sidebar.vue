@@ -39,7 +39,7 @@ const menuGroups = [
   {
     label: '财务中心',
     items: [
-      { title: '资金管理', href: '/wallet', icon: WalletIcon },
+      // { title: '资金管理', href: '/wallet', icon: WalletIcon },
       { title: '账单管理', href: '/billing', icon: ReceiptPercentIcon },
     ],
   },
