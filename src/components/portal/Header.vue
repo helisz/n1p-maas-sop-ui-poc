@@ -16,21 +16,21 @@ const initials = auth.user?.name?.charAt(0) ?? '管';
 </script>
 
 <template>
-  <header class="flex h-14 items-center justify-between border-b border-white/10 bg-black px-6 text-white">
+  <header class="flex h-14 items-center justify-between border-b  border-[#e8e9f0]/60 px-6 text-white">
     <div class="flex items-center gap-2">
       <slot name="logo" />
     </div>
 
     <div class="flex items-center gap-2">
       <!-- Notifications -->
-      <Button variant="ghost" size="icon" class="relative text-white hover:bg-white/10 hover:text-white">
-        <BellIcon class="h-4 w-4" />
-        <Badge class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full p-0 text-[10px] leading-none"> 3 </Badge>
+      <Button variant="ghost" size="icon" class="relative h-8 w-8">
+        <BellIcon class="h-[18px] w-[18px] text-muted-foreground" />
+        <span class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-[#3841D8] ring-2 ring-background" />
       </Button>
 
       <!-- Help -->
-      <Button variant="ghost" size="icon" class="text-white hover:bg-white/10 hover:text-white">
-        <QuestionMarkCircleIcon class="h-4 w-4" />
+      <Button variant="ghost" size="icon" class="hidden sm:flex h-8 w-8">
+        <QuestionMarkCircleIcon class="h-[18px] w-[18px] text-muted-foreground" />
       </Button>
 
       <!-- User Menu -->
@@ -39,15 +39,15 @@ const initials = auth.user?.name?.charAt(0) ?? '管';
           <Button variant="ghost" class="flex items-center gap-2 px-2 text-white hover:bg-white/10 hover:text-white">
             <Avatar size="sm">
               <img v-if="auth.user?.avatar" :src="auth.user.avatar" alt="头像" class="h-full w-full rounded-full object-cover" />
-              <AvatarFallback class="text-primary bg-white text-xs">
+              <AvatarFallback v-else class="bg-[#eaf0ff] text-[#3841D8] text-xs font-semibold">
                 {{ initials }}
               </AvatarFallback>
             </Avatar>
             <div class="flex flex-col items-start text-xs">
-              <span class="font-medium">{{ auth.user?.name ?? '运营管理员' }}</span>
-              <span class="text-white/70">{{ auth.user?.role ?? '管理员' }}</span>
+              <span class="font-medium text-foreground">{{ auth.user?.name ?? '运营管理员' }}</span>
+              <span class="text-muted-foreground text-[11px]">{{ auth.user?.role ?? '管理员' }}</span>
             </div>
-            <ChevronDownIcon class="h-4 w-4 text-white/70" />
+             <ChevronDownIcon class="text-muted-foreground h-3.5 w-3.5" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" class="w-48">
