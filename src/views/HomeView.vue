@@ -24,7 +24,7 @@ async function handleLogin() {
 <template>
   <div class="flex min-h-screen w-full">
     <!-- Left Panel: Black background, platform introduction -->
-    <div class="relative hidden flex-col justify-between overflow-hidden bg-black p-12 text-white lg:flex lg:w-1/2">
+    <div class="relative hidden flex-col justify-between overflow-hidden bg-[#0841ad] p-12 text-white lg:flex lg:w-1/2">
       <!-- Tech background -->
       <div class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <div class="tech-lines absolute inset-0"></div>
