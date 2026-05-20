@@ -169,7 +169,8 @@ const stats = computed(() => ({
               <TableHead>联系电话</TableHead>
               <TableHead>认证状态</TableHead>
               <TableHead>网银Key</TableHead>
-              <TableHead>注册时间</TableHead>
+              <TableHead>认证时间</TableHead>
+              <TableHead>创建时间</TableHead>
               <TableHead class="text-right">操作</TableHead>
             </TableRow>
           </TableHeader>
@@ -189,6 +190,7 @@ const stats = computed(() => ({
                 <Badge v-if="ent.uKeyBound" variant="outline" class="gap-1"> <ShieldCheckIcon class="h-3 w-3 text-green-500" />已绑定 </Badge>
                 <Badge v-else variant="outline" class="gap-1"> <LockClosedIcon class="text-muted-foreground h-3 w-3" />未绑定 </Badge>
               </TableCell>
+              <TableCell class="text-muted-foreground">{{ ent.registeredAt }}</TableCell>
               <TableCell class="text-muted-foreground">{{ ent.registeredAt }}</TableCell>
               <TableCell class="text-right">
                 <div class="flex justify-end gap-2">

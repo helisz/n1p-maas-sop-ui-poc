@@ -102,7 +102,6 @@ const userSearch = ref('');
 const channelSearch = ref('');
 const createUserOpen = ref(false);
 const createChannelOpen = ref(false);
-const showApiKeyFor = ref<string | null>(null);
 
 const newUserForm = ref({
   enterpriseId: '',
@@ -228,10 +227,6 @@ function submitCreateChannel() {
   createChannelOpen.value = false;
 }
 
-function copyToClipboard(text: string) {
-  navigator.clipboard.writeText(text);
-}
-
 function toggleUserStatus(user: ApiUser) {
   user.status = user.status === 'active' ? 'disabled' : 'active';
 }
@@ -249,14 +244,14 @@ function deleteChannel(channel: Channel) {
   <div class="space-y-8">
     <div>
       <h2 class="text-foreground text-2xl font-semibold">算力接入</h2>
-      <p class="text-muted-foreground">管理 New API User 與算力渠道配置</p>
+      <p class="text-muted-foreground">管理 New API User 与算力渠道配置</p>
     </div>
 
     <!-- Unified Stats -->
     <div class="grid gap-4 md:grid-cols-4">
       <Card>
         <CardHeader class="pb-2">
-          <CardTitle class="text-muted-foreground text-sm font-medium">總 User 數</CardTitle>
+          <CardTitle class="text-muted-foreground text-sm font-medium">总 User 数</CardTitle>
         </CardHeader>
         <CardContent>
           <div class="text-2xl font-bold">{{ stats.totalUsers }}</div>
@@ -264,7 +259,7 @@ function deleteChannel(channel: Channel) {
       </Card>
       <Card>
         <CardHeader class="pb-2">
-          <CardTitle class="text-muted-foreground text-sm font-medium">已啟用 User</CardTitle>
+          <CardTitle class="text-muted-foreground text-sm font-medium">已启用 User</CardTitle>
         </CardHeader>
         <CardContent>
           <div class="text-2xl font-bold text-green-600">{{ stats.activeUsers }}</div>
@@ -272,7 +267,7 @@ function deleteChannel(channel: Channel) {
       </Card>
       <Card>
         <CardHeader class="pb-2">
-          <CardTitle class="text-muted-foreground text-sm font-medium">總渠道數</CardTitle>
+          <CardTitle class="text-muted-foreground text-sm font-medium">总渠道数</CardTitle>
         </CardHeader>
         <CardContent>
           <div class="text-2xl font-bold">{{ stats.totalChannels }}</div>
@@ -280,7 +275,7 @@ function deleteChannel(channel: Channel) {
       </Card>
       <Card>
         <CardHeader class="pb-2">
-          <CardTitle class="text-muted-foreground text-sm font-medium">分組數</CardTitle>
+          <CardTitle class="text-muted-foreground text-sm font-medium">分组数</CardTitle>
         </CardHeader>
         <CardContent>
           <div class="text-2xl font-bold text-blue-600">{{ stats.groups }}</div>
@@ -305,7 +300,7 @@ function deleteChannel(channel: Channel) {
             <div class="flex flex-wrap items-center gap-3">
               <div class="relative">
                 <MagnifyingGlassIcon class="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
-                <Input v-model="userSearch" placeholder="搜索 User ID、用戶名或企业..." class="w-64 pl-8" />
+                <Input v-model="userSearch" placeholder="搜索 User ID、用户名或企业..." class="w-64 pl-8" />
               </div>
               <Button size="sm" @click="createUserOpen = true">
                 <PlusIcon class="mr-1 h-4 w-4" />
@@ -320,16 +315,16 @@ function deleteChannel(channel: Channel) {
               <TableHeader>
                 <TableRow>
                   <TableHead>User ID</TableHead>
-                  <TableHead>用戶名</TableHead>
-                  <TableHead>企業</TableHead>
-                  <TableHead>狀態</TableHead>
-                  <TableHead>創建時間</TableHead>
+                  <TableHead>用户名</TableHead>
+                  <TableHead>企业</TableHead>
+                  <TableHead>状态</TableHead>
+                  <TableHead>创建时间</TableHead>
                   <TableHead class="text-right">操作</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <TableRow v-for="user in filteredUsers" :key="user.id">
-                  <TableCell class="text-muted-foreground font-mono text-xs">{{ user.id }}</TableCell>
+                  <TableCell class="text-muted-foreground text-xs">{{ user.id }}</TableCell>
                   <TableCell class="text-sm font-medium">{{ user.username }}</TableCell>
                   <TableCell class="flex items-center gap-1.5 text-sm">
                     <BuildingOffice2Icon class="text-muted-foreground h-3.5 w-3.5" />
@@ -338,7 +333,7 @@ function deleteChannel(channel: Channel) {
                   <TableCell>
                     <Badge v-if="user.status === 'active'" variant="outline" class="gap-1 border-green-200 bg-green-50 text-green-700">
                       <CheckCircleIcon class="h-3 w-3" />
-                      啟用
+                      启用
                     </Badge>
                     <Badge v-else variant="outline" class="gap-1 border-red-200 bg-red-50 text-red-700">
                       <NoSymbolIcon class="h-3 w-3" />
@@ -351,7 +346,7 @@ function deleteChannel(channel: Channel) {
                       <Button v-if="user.status === 'active'" variant="ghost" size="sm" class="text-destructive" @click="toggleUserStatus(user)"> 停用 </Button>
                       <Button v-else variant="ghost" size="sm" @click="toggleUserStatus(user)">
                         <PlayIcon class="mr-1 h-3 w-3" />
-                        啟用
+                        启用
                       </Button>
                     </div>
                   </TableCell>
@@ -359,7 +354,7 @@ function deleteChannel(channel: Channel) {
                 <TableEmpty v-if="filteredUsers.length === 0">
                   <div class="text-muted-foreground flex flex-col items-center justify-center py-8">
                     <InformationCircleIcon class="mb-2 h-8 w-8 opacity-50" />
-                    <p>暫無 User 數據</p>
+                    <p>暂无 User 数据</p>
                   </div>
                 </TableEmpty>
               </TableBody>
@@ -380,8 +375,8 @@ function deleteChannel(channel: Channel) {
       <div v-if="apiUsers.length === 0" class="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-800">
         <ExclamationTriangleIcon class="mt-0.5 h-5 w-5 shrink-0" />
         <div>
-          <p class="text-sm font-medium">暫無可用 User</p>
-          <p class="text-xs opacity-80">請先新建 User，才能創建渠道。</p>
+          <p class="text-sm font-medium">暂无可用 User</p>
+          <p class="text-xs opacity-80">请先新建 User，才能创建渠道。</p>
         </div>
       </div>
 
@@ -410,23 +405,21 @@ function deleteChannel(channel: Channel) {
               <TableHeader>
                 <TableRow>
                   <TableHead>渠道 ID</TableHead>
-                  <TableHead>渠道名稱</TableHead>
-                  <TableHead>所屬 User</TableHead>
-                  <TableHead>分組</TableHead>
+                  <TableHead>渠道名称</TableHead>
+                  <TableHead>所属 User</TableHead>
+                  <TableHead>分组</TableHead>
                   <TableHead>模型</TableHead>
-                  <TableHead>API Key</TableHead>
-                  <TableHead>狀態</TableHead>
-                  <TableHead>創建時間</TableHead>
+                  <TableHead>状态</TableHead>
+                  <TableHead>创建时间</TableHead>
                   <TableHead class="text-right">操作</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <TableRow v-for="ch in filteredChannels" :key="ch.id">
-                  <TableCell class="text-muted-foreground font-mono text-xs">{{ ch.id }}</TableCell>
+                  <TableCell class="text-muted-foreground text-xs">{{ ch.id }}</TableCell>
                   <TableCell class="text-sm font-medium">{{ ch.name }}</TableCell>
-                  <TableCell class="text-muted-foreground font-mono text-xs">{{ ch.userId }}</TableCell>
-                  <TableCell class="flex items-center gap-1.5 text-sm">
-                    <BuildingOffice2Icon class="text-muted-foreground h-3.5 w-3.5" />
+                  <TableCell class="text-muted-foreground text-xs">{{ ch.userId }}</TableCell>
+                  <TableCell class="text-sm">
                     {{ ch.enterpriseName }}
                   </TableCell>
                   <TableCell>
@@ -438,20 +431,9 @@ function deleteChannel(channel: Channel) {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div class="flex items-center gap-1.5">
-                      <code class="text-muted-foreground text-xs">
-                        {{ showApiKeyFor === ch.id ? ch.apiKey : '••••••••••••' }}
-                      </code>
-                      <Button variant="ghost" size="icon" class="h-6 w-6" @click="showApiKeyFor = showApiKeyFor === ch.id ? null : ch.id">
-                        <EyeIcon v-if="showApiKeyFor !== ch.id" class="h-3 w-3" />
-                        <EyeSlashIcon v-else class="h-3 w-3" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                  <TableCell>
                     <Badge v-if="ch.status === 'active'" variant="outline" class="gap-1 border-green-200 bg-green-50 text-green-700">
                       <CheckCircleIcon class="h-3 w-3" />
-                      啟用
+                      启用
                     </Badge>
                     <Badge v-else variant="outline" class="gap-1 border-red-200 bg-red-50 text-red-700">
                       <NoSymbolIcon class="h-3 w-3" />
@@ -464,11 +446,11 @@ function deleteChannel(channel: Channel) {
                       <Button v-if="ch.status === 'active'" variant="ghost" size="sm" class="text-destructive" @click="toggleChannelStatus(ch)"> 停用 </Button>
                       <Button v-else variant="ghost" size="sm" @click="toggleChannelStatus(ch)">
                         <PlayIcon class="mr-1 h-3 w-3" />
-                        啟用
+                        启用
                       </Button>
                       <Button variant="ghost" size="sm" class="text-destructive" @click="deleteChannel(ch)">
                         <TrashIcon class="mr-1 h-3 w-3" />
-                        刪除
+                        删除
                       </Button>
                     </div>
                   </TableCell>
@@ -476,7 +458,7 @@ function deleteChannel(channel: Channel) {
                 <TableEmpty v-if="filteredChannels.length === 0">
                   <div class="text-muted-foreground flex flex-col items-center justify-center py-8">
                     <ServerIcon class="mb-2 h-8 w-8 opacity-50" />
-                    <p>暫無渠道數據</p>
+                    <p>暂无渠道数据</p>
                   </div>
                 </TableEmpty>
               </TableBody>
@@ -491,14 +473,14 @@ function deleteChannel(channel: Channel) {
       <DialogContent class="max-w-md">
         <DialogHeader>
           <DialogTitle>新建 API User</DialogTitle>
-          <DialogDescription>選擇企業並設置用戶名</DialogDescription>
+          <DialogDescription>选择企业并设置用户名</DialogDescription>
         </DialogHeader>
         <div class="max-h-[60vh] space-y-4 overflow-y-auto py-2 pr-3">
           <div class="space-y-2">
-            <Label>選擇企業</Label>
+            <Label>选择企业</Label>
             <Select v-model="newUserForm.enterpriseId">
-              <SelectTrigger>
-                <SelectValue placeholder="請選擇企業" />
+              <SelectTrigger class="w-full">
+                <SelectValue placeholder="请选择企业" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem v-for="ent in enterprises" :key="ent.id" :value="ent.id">
@@ -508,13 +490,13 @@ function deleteChannel(channel: Channel) {
             </Select>
           </div>
           <div class="space-y-2">
-            <Label>用戶名</Label>
-            <Input v-model="newUserForm.username" placeholder="請輸入用戶名" />
+            <Label>用户名</Label>
+            <Input v-model="newUserForm.username" placeholder="请输入用户名" />
           </div>
         </div>
         <DialogFooter>
           <Button variant="outline" @click="createUserOpen = false">取消</Button>
-          <Button :disabled="!newUserForm.enterpriseId || !newUserForm.username.trim()" @click="submitCreateUser">確認創建</Button>
+          <Button :disabled="!newUserForm.enterpriseId || !newUserForm.username.trim()" @click="submitCreateUser">确认创建</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -528,10 +510,10 @@ function deleteChannel(channel: Channel) {
         </DialogHeader>
         <div class="max-h-[60vh] space-y-4 overflow-y-auto py-2 pr-3">
           <div class="space-y-2">
-            <Label>所屬 User</Label>
+            <Label>所属 User</Label>
             <Select v-model="newChannelForm.userId">
-              <SelectTrigger>
-                <SelectValue placeholder="請選擇 User" />
+              <SelectTrigger class="w-full">
+                <SelectValue placeholder="请选择 User" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem v-for="user in apiUsers" :key="user.id" :value="user.id"> {{ user.id }}（{{ user.enterpriseName }}） </SelectItem>
@@ -540,19 +522,19 @@ function deleteChannel(channel: Channel) {
           </div>
           <div v-if="selectedUserForChannel" class="bg-muted/50 flex items-center gap-2 rounded-md px-3 py-2 text-sm">
             <BuildingOffice2Icon class="text-muted-foreground h-4 w-4" />
-            <span class="text-muted-foreground">分組：</span>
+            <span class="text-muted-foreground">分组：</span>
             <span class="font-medium">{{ selectedUserForChannel.enterpriseName }}</span>
           </div>
           <div class="space-y-2">
-            <Label>渠道名稱</Label>
-            <Input v-model="newChannelForm.name" placeholder="請輸入渠道名稱" />
+            <Label>渠道名称</Label>
+            <Input v-model="newChannelForm.name" placeholder="请输入渠道名称" />
           </div>
           <div class="space-y-2">
-            <Label>API Key <span class="text-muted-foreground text-xs font-normal">（每行一個，可批量）</span></Label>
-            <Textarea v-model="newChannelForm.apiKeys" placeholder="請輸入 API Key，每行一個&#10;sk-xxxxxxxxxxxx1&#10;sk-xxxxxxxxxxxx2" class="min-h-[80px]" />
+            <Label>API Key</Label>
+            <Textarea v-model="newChannelForm.apiKeys" placeholder="请输入 API Key，每行一个&#10;sk-xxxxxxxxxxxx1&#10;sk-xxxxxxxxxxxx2" class="min-h-[80px]" />
           </div>
           <div class="space-y-2">
-            <Label>模型 <span class="text-muted-foreground text-xs font-normal">（可多選）</span></Label>
+            <Label>模型 </Label>
             <div class="flex flex-wrap gap-2">
               <button
                 v-for="m in modelOptions"
@@ -565,7 +547,7 @@ function deleteChannel(channel: Channel) {
                 {{ m }}
               </button>
             </div>
-            <p v-if="newChannelForm.models.length > 0" class="text-muted-foreground text-xs">已選 {{ newChannelForm.models.length }} 個模型</p>
+            <p v-if="newChannelForm.models.length > 0" class="text-muted-foreground text-xs">已选 {{ newChannelForm.models.length }} 个模型</p>
           </div>
           <div class="space-y-2">
             <Label>API 地址</Label>
@@ -574,7 +556,7 @@ function deleteChannel(channel: Channel) {
         </div>
         <DialogFooter>
           <Button variant="outline" @click="createChannelOpen = false">取消</Button>
-          <Button :disabled="!newChannelForm.userId || !newChannelForm.name.trim() || newChannelForm.models.length === 0 || !newChannelForm.apiBaseUrl.trim()" @click="submitCreateChannel"> 確認創建 </Button>
+          <Button :disabled="!newChannelForm.userId || !newChannelForm.name.trim() || newChannelForm.models.length === 0 || !newChannelForm.apiBaseUrl.trim()" @click="submitCreateChannel"> 确认创建 </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

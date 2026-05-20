@@ -251,7 +251,6 @@ const stats = computed(() => ({
                 <TableHead>用户名</TableHead>
                 <TableHead>邮箱</TableHead>
                 <TableHead>所属企业</TableHead>
-                <TableHead>部门</TableHead>
                 <TableHead>角色</TableHead>
                 <TableHead>账号状态</TableHead>
                 <TableHead>注册时间</TableHead>
@@ -265,7 +264,6 @@ const stats = computed(() => ({
                 <TableCell class="font-medium">{{ user.name }}</TableCell>
                 <TableCell class="text-sm">{{ user.email }}</TableCell>
                 <TableCell class="text-sm">{{ user.company }}</TableCell>
-                <TableCell class="text-sm">{{ user.department }}</TableCell>
                 <TableCell>
                   <Badge variant="outline" class="text-xs">{{ user.role }}</Badge>
                 </TableCell>
