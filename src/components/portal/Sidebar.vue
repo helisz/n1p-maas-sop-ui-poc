@@ -3,7 +3,7 @@
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { cn } from '@/lib/utils';
-import { Squares2X2Icon, CubeIcon, ShoppingCartIcon, SparklesIcon, WalletIcon, ReceiptPercentIcon, DocumentTextIcon, BuildingOffice2Icon, PresentationChartLineIcon, ChevronLeftIcon, MagnifyingGlassIcon, CheckBadgeIcon, UserGroupIcon } from '@heroicons/vue/24/outline';
+import { Squares2X2Icon, CubeIcon, ShoppingCartIcon, SparklesIcon, WalletIcon, ReceiptPercentIcon, DocumentTextIcon, BuildingOffice2Icon, PresentationChartLineIcon, ChevronLeftIcon, MagnifyingGlassIcon, CheckBadgeIcon, UserGroupIcon, CpuChipIcon } from '@heroicons/vue/24/outline';
 
 const props = withDefaults(
   defineProps<{
@@ -13,6 +13,10 @@ const props = withDefaults(
     mobileOpen: false,
   },
 );
+
+const emit = defineEmits<{
+  close: [];
+}>();
 
 const route = useRoute();
 const router = useRouter();
@@ -39,6 +43,9 @@ const menuGroups = [
       // [AI_START TIMESTAMP=2025-07-16 06:10:00]
       { title: '已订购服务管理', href: '/services/subscribed', icon: CheckBadgeIcon },
       // [AI_END LINES=1 TIMESTAMP=2025-07-16 06:10:00]
+      // [AI_START TIMESTAMP=2025-07-22 08:00:00]
+      { title: '算力接入', href: '/compute-access', icon: CpuChipIcon },
+      // [AI_END LINES=1 TIMESTAMP=2025-07-22 08:00:00]
     ],
   },
   {
@@ -74,18 +81,9 @@ function navigate(href: string) {
   </Transition>
 
   <!-- Sidebar -->
-  <aside
-    :class="
-      cn(
-        'flex h-screen flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300 ease-out',
-        'fixed z-50 lg:static',
-        mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
-        collapsed ? 'w-[4rem]' : 'w-[15.5rem]',
-      )
-    "
-  >
+  <aside :class="cn('bg-sidebar border-sidebar-border flex h-screen flex-col border-r transition-all duration-300 ease-out', 'fixed z-50 lg:static', mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0', collapsed ? 'w-[4rem]' : 'w-[15.5rem]')">
     <!-- Logo -->
-    <div class="flex h-[3.5rem] items-center justify-between border-b border-sidebar-border px-4">
+    <div class="border-sidebar-border flex h-[3.5rem] items-center justify-between border-b px-4">
       <div class="flex items-center gap-2.5 overflow-hidden">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-7 w-7 shrink-0">
           <rect width="32" height="32" rx="6" fill="#3841D8" />
@@ -93,7 +91,7 @@ function navigate(href: string) {
           <path d="M7 16.5l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.6" stroke-linecap="round" stroke-linejoin="round" />
           <path d="M7 20l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.35" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
-        <span v-if="!collapsed" class="text-foreground text-sm font-semibold whitespace-nowrap tracking-tight">企业统一服务门户 <span  class="text-red-600">POC</span></span>
+        <span v-if="!collapsed" class="text-foreground text-sm font-semibold tracking-tight whitespace-nowrap">企业统一服务门户 <span class="text-red-600">POC</span></span>
       </div>
       <button v-if="!collapsed" class="text-muted-foreground hover:text-foreground hover:bg-accent flex h-7 w-7 items-center justify-center rounded-md transition-colors lg:hidden" @click="emit('close')">
         <XMarkIcon class="h-4 w-4" />
@@ -104,10 +102,7 @@ function navigate(href: string) {
     <div v-if="!collapsed" class="px-3 pt-3 pb-1">
       <div class="relative">
         <MagnifyingGlassIcon class="text-muted-foreground absolute top-2 left-2.5 h-[14px] w-[14px]" />
-        <Input
-          placeholder="搜索功能..."
-          class="bg-secondary/60 focus-visible:bg-background focus-visible:border-[#3841D8]/30 h-8 border-transparent pl-8 text-xs shadow-none transition-all placeholder:text-muted-foreground/60"
-        />
+        <Input placeholder="搜索功能..." class="bg-secondary/60 focus-visible:bg-background placeholder:text-muted-foreground/60 h-8 border-transparent pl-8 text-xs shadow-none transition-all focus-visible:border-[#3841D8]/30" />
       </div>
     </div>
 
@@ -116,49 +111,29 @@ function navigate(href: string) {
       <template v-for="(group, gi) in menuGroups" :key="gi">
         <!-- Group label -->
         <div v-if="group.label && !collapsed" class="px-2.5 pt-4 pb-1.5">
-          <span class="text-[11px] font-semibold text-muted-foreground/60 uppercase tracking-wider">{{ group.label }}</span>
-          <div class="mt-1.5 h-[1px] bg-gradient-to-r from-border via-border/50 to-transparent" />
+          <span class="text-muted-foreground/60 text-[11px] font-semibold tracking-wider uppercase">{{ group.label }}</span>
+          <div class="from-border via-border/50 mt-1.5 h-[1px] bg-gradient-to-r to-transparent" />
         </div>
-        <div v-if="group.label && collapsed" class="mx-2 my-2 h-[1px] bg-border/60" />
+        <div v-if="group.label && collapsed" class="bg-border/60 mx-2 my-2 h-[1px]" />
 
         <!-- Menu items -->
         <button
           v-for="item in group.items"
           :key="item.href"
           @click="navigate(item.href)"
-          :class="cn(
-            'flex w-full items-center gap-3 rounded-md px-2.5 py-[7px] text-[13px] transition-all duration-200 group',
-            route.path === item.href
-              ? 'bg-[#eaf0ff] text-[#3841D8] font-semibold'
-              : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
-          )"
+          :class="cn('group flex w-full items-center gap-3 rounded-md px-2.5 py-[7px] text-[13px] transition-all duration-200', route.path === item.href ? 'bg-[#eaf0ff] font-semibold text-[#3841D8]' : 'text-muted-foreground hover:bg-secondary hover:text-foreground')"
         >
-          <component
-            :is="item.icon"
-            :class="cn(
-              'h-[18px] w-[18px] shrink-0 transition-colors',
-              route.path === item.href ? 'text-[#3841D8]' : 'text-muted-foreground/70 group-hover:text-foreground'
-            )"
-          />
+          <component :is="item.icon" :class="cn('h-[18px] w-[18px] shrink-0 transition-colors', route.path === item.href ? 'text-[#3841D8]' : 'text-muted-foreground/70 group-hover:text-foreground')" />
           <span v-if="!collapsed" class="truncate">{{ item.title }}</span>
           <!-- Active indicator dot -->
-          <div
-            v-if="route.path === item.href && !collapsed"
-            class="ml-auto h-1.5 w-1.5 rounded-full bg-[#3841D8]"
-          />
+          <div v-if="route.path === item.href && !collapsed" class="ml-auto h-1.5 w-1.5 rounded-full bg-[#3841D8]" />
         </button>
       </template>
     </nav>
 
     <!-- Collapse Button -->
-    <div class="border-t border-sidebar-border p-2.5">
-      <button
-        @click="collapsed = !collapsed"
-        :class="cn(
-          'text-muted-foreground hover:text-foreground hover:bg-secondary flex items-center rounded-md transition-all duration-200',
-          collapsed ? 'w-full justify-center py-2' : 'w-full justify-center gap-2 py-1.5'
-        )"
-      >
+    <div class="border-sidebar-border border-t p-2.5">
+      <button @click="collapsed = !collapsed" :class="cn('text-muted-foreground hover:text-foreground hover:bg-secondary flex items-center rounded-md transition-all duration-200', collapsed ? 'w-full justify-center py-2' : 'w-full justify-center gap-2 py-1.5')">
         <ChevronLeftIcon :class="cn('h-4 w-4 transition-transform duration-300', collapsed && 'rotate-180')" />
         <span v-if="!collapsed" class="text-xs font-medium">收起菜单</span>
       </button>

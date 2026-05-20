@@ -74,6 +74,12 @@ const routes: RouteRecordRaw[] = [
   },
   // [AI_END LINES=6 TIMESTAMP=2025-07-16 06:10:00]
   {
+    path: '/compute-access',
+    name: 'ComputeAccess',
+    component: () => import('@/views/ComputeAccessView.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
     path: '/usage',
     name: 'Usage',
     component: () => import('@/views/UsageView.vue'),
