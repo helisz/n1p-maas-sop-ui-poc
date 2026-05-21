@@ -24,7 +24,7 @@ async function handleLogin() {
 <template>
   <div class="flex min-h-screen w-full">
     <!-- Left Panel: Black background, platform introduction -->
-    <div class="relative hidden flex-col justify-between overflow-hidden bg-[#0841ad] p-12 text-white lg:flex lg:w-1/2">
+    <div class="relative hidden flex-col justify-between overflow-hidden bg-[#1c386f] p-12 text-white lg:flex lg:w-1/2">
       <!-- Tech background -->
       <div class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <div class="tech-lines absolute inset-0"></div>
@@ -33,11 +33,11 @@ async function handleLogin() {
 
       <div class="relative z-10">
         <div class="flex items-center gap-3">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-8 w-8 rounded-lg">
-            <rect width="32" height="32" rx="8" fill="#ffffff" />
-            <path d="M16 7L7 12.5l9 5.5 9-5.5z" fill="#000000" opacity="0.95" />
-            <path d="M7 16.5l9 5.5 9-5.5" fill="none" stroke="#000000" stroke-width="1.8" opacity="0.55" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M7 20l9 5.5 9-5.5" fill="none" stroke="#000000" stroke-width="1.8" opacity="0.3" stroke-linecap="round" stroke-linejoin="round" />
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-7 w-7 shrink-0">
+            <rect width="32" height="32" rx="6" fill="#3841D8" />
+            <path d="M16 7L7 12.5l9 5.5 9-5.5z" fill="#fff" opacity="0.95" />
+            <path d="M7 16.5l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.6" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M7 20l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.35" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
           <span class="text-xl font-semibold">应用运营门户 <span class="text-red-600">POC</span></span>
         </div>
