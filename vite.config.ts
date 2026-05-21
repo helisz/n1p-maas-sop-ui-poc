@@ -21,14 +21,28 @@ export default defineConfig({
 
       // 2. 修改路由路径 (Path)
       extendRoute(route) {
-        // 将末尾的 View 或 view 删掉（例如 /homeview 变为 /home）
-        if (route.path.toLowerCase().endsWith('view')) {
-          route.path = route.path.replace(/[Vv]iew$/, '');
+        // 1. 先把末尾的 view 或 View 删掉
+        let path = route.path.replace(/[Vv]iew$/, '');
+
+        // 2. 将驼峰命名（如 SubscribedServices）转为连字符（subscribed-services）
+        path = path
+          .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
+          .replace(/([a-z\d])([A-Z])/g, '$1-$2')
+          .toLowerCase();
+
+        // 3. 针对 services 目录下的特殊处理：将 -services 尾缀删掉
+        // 这样 /services/subscribed-services 就会变成 /services/subscribed
+        if (path.startsWith('/services/') && path.endsWith('-services')) {
+          path = path.replace(/-services$/, '');
         }
-        // 如果处理后变成空字符串（比如旧的是 /View），则修复为根路径 /
-        if (route.path === '') {
-          route.path = '/';
+
+        // 4. 修复根路径
+        if (path === '') {
+          path = '/';
         }
+
+        // 将处理好的新路径赋值回去
+        route.path = path;
       },
     }),
     vue(),

@@ -41,7 +41,7 @@ const menuGroups = [
       { title: '套餐管理', href: '/packages', icon: CubeIcon },
       { title: '模型管理', href: '/models', icon: SparklesIcon },
       // [AI_START TIMESTAMP=2025-07-16 06:10:00]
-      { title: '已订购服务管理', href: '/services/subscribed', icon: CheckBadgeIcon },
+      { title: '已订购服务管理', href: '/subscribed-services', icon: CheckBadgeIcon },
       // [AI_END LINES=1 TIMESTAMP=2025-07-16 06:10:00]
       // [AI_START TIMESTAMP=2025-07-22 08:00:00]
       { title: '算力接入', href: '/compute-access', icon: CpuChipIcon },
