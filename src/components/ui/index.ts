@@ -23,3 +23,4 @@ export * from './dropdown-menu';
 export * from './dialog';
 export * from './label';
 export * from './table';
+export * from './data-table';

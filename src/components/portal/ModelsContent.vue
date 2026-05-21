@@ -1,6 +1,8 @@
 <!-- [AI_START TIMESTAMP=2025-07-18 12:30:00] -->
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, h } from 'vue';
+import { createColumnHelper } from '@tanstack/vue-table';
+import { cn } from '@/lib/utils';
 import { MagnifyingGlassIcon, SparklesIcon, CheckCircleIcon, ExclamationTriangleIcon, XCircleIcon, EyeIcon, PencilSquareIcon, BoltIcon, PlusIcon, ChevronRightIcon, ChevronLeftIcon, CpuChipIcon, RectangleStackIcon, HashtagIcon, GlobeAltIcon, CurrencyDollarIcon } from '@heroicons/vue/24/outline';
 
 interface TierPricing {
@@ -401,12 +403,6 @@ const statusConfig: Record<
   },
 };
 
-const tierLabels: Record<string, string> = {
-  basic: '基础版',
-  advanced: '高级版',
-  premium: '尊享版',
-};
-
 const tierBadgeClasses: Record<string, string> = {
   basic: 'bg-slate-100 text-slate-700',
   advanced: 'bg-indigo-100 text-indigo-700',
@@ -439,6 +435,63 @@ const filteredModels = computed(() => {
   }
   return result;
 });
+
+const columnHelper = createColumnHelper<ModelItem>();
+
+const columns = [
+  columnHelper.accessor('name', {
+    header: '模型名称',
+    cell: ({ row }) => h('div', [h('div', { class: 'font-medium' }, row.original.name), h('div', { class: 'text-muted-foreground font-mono text-xs' }, row.original.id)]),
+    // meta: { pinned: 'left' },
+  }),
+  columnHelper.accessor('provider', {
+    header: '提供商',
+    cell: ({ row }) =>
+      h(
+        'span',
+        {
+          class: cn('inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium', providerColors[row.original.provider] || 'bg-muted text-muted-foreground'),
+        },
+        row.original.provider,
+      ),
+  }),
+  columnHelper.accessor('tags', {
+    header: '标签',
+  }),
+  columnHelper.accessor('modality', {
+    header: '模态',
+  }),
+  columnHelper.accessor('contextLength', {
+    header: '上下文',
+    cell: ({ row }) => formatContext(row.original.contextLength),
+  }),
+  columnHelper.accessor('pricing.basic.input', {
+    header: '售价 Input',
+    cell: ({ row }) => `${formatPriceShort(row.original.pricing.basic.input)}/1M`,
+  }),
+  columnHelper.accessor('pricing.basic.output', {
+    header: '售价 Output',
+    cell: ({ row }) => `${formatPriceShort(row.original.pricing.basic.output)}/1M`,
+  }),
+  columnHelper.accessor('pricing.basic.cacheRead', {
+    header: '售价 Cache',
+    cell: ({ row }) => `${formatPriceShort(row.original.pricing.basic.cacheRead)}/1M`,
+  }),
+  columnHelper.accessor('rpm', {
+    header: 'RPM',
+    cell: ({ row }) => row.original.rpm.toLocaleString(),
+  }),
+  columnHelper.accessor('status', {
+    header: '状态',
+  }),
+  columnHelper.display({
+    id: 'actions',
+    header: () => h('div', { class: 'text-right' }, '操作'),
+    cell: () => null,
+    size: 180,
+    meta: { pinned: 'right' },
+  }),
+];
 
 function handleViewDetail(model: ModelItem) {
   selectedModel.value = model;
@@ -677,66 +730,26 @@ const computedPremium = computed(() => {
       </CardHeader>
 
       <CardContent>
-        <div class="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>模型名称</TableHead>
-                <TableHead>提供商</TableHead>
-                <TableHead>标签</TableHead>
-                <TableHead>模态</TableHead>
-                <TableHead>上下文</TableHead>
-                <TableHead>售价 Input</TableHead>
-                <TableHead>售价 Output</TableHead>
-                <TableHead>售价 Cache</TableHead>
-                <TableHead>RPM</TableHead>
-                <TableHead>状态</TableHead>
-                <TableHead class="text-right">操作</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow v-for="model in filteredModels" :key="model.id">
-                <TableCell>
-                  <div>
-                    <div class="font-medium">{{ model.name }}</div>
-                    <div class="text-muted-foreground font-mono text-xs">{{ model.id }}</div>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <span :class="['inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium', providerColors[model.provider] || 'bg-muted text-muted-foreground']">
-                    {{ model.provider }}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <div class="flex flex-wrap gap-1">
-                    <Badge v-for="tag in model.tags" :key="tag" variant="secondary" class="text-[10px]">
-                      {{ tag }}
-                    </Badge>
-                  </div>
-                </TableCell>
-                <TableCell class="text-sm">{{ model.modality }}</TableCell>
-                <TableCell class="text-sm">{{ formatContext(model.contextLength) }}</TableCell>
-                <TableCell class="text-sm">{{ formatPriceShort(model.pricing.basic.input) }}/1M</TableCell>
-                <TableCell class="text-sm">{{ formatPriceShort(model.pricing.basic.output) }}/1M</TableCell>
-                <TableCell class="text-sm">{{ formatPriceShort(model.pricing.basic.cacheRead) }}/1M</TableCell>
-                <TableCell class="text-sm">{{ model.rpm.toLocaleString() }}</TableCell>
-                <TableCell>
-                  <Badge :variant="statusConfig[model.status].variant" class="gap-1">
-                    <component :is="statusConfig[model.status].icon" :class="['h-3 w-3', statusConfig[model.status].class]" />
-                    {{ statusConfig[model.status].label }}
-                  </Badge>
-                </TableCell>
-                <TableCell class="text-right">
-                  <div class="flex justify-end gap-1">
-                    <Button variant="ghost" size="sm" @click="handleViewDetail(model)"><EyeIcon class="mr-1 h-3 w-3" />详情</Button>
-                    <Button variant="ghost" size="sm"><PencilSquareIcon class="mr-1 h-3 w-3" />编辑</Button>
-                    <Button variant="ghost" size="sm" @click="toggleStatus(model)"><BoltIcon class="mr-1 h-3 w-3" />{{ model.status === 'online' ? '停用' : '启用' }}</Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </div>
+        <DataTable :columns="columns" :data="filteredModels" enable-pagination enable-column-resizing enableColumnPinning>
+          <template #cell-tags="{ row }">
+            <div class="flex flex-wrap gap-1">
+              <Badge v-for="tag in row.original.tags" :key="tag" variant="secondary" class="text-[10px]">{{ tag }}</Badge>
+            </div>
+          </template>
+          <template #cell-status="{ row }">
+            <Badge :variant="statusConfig[row.original.status].variant" class="gap-1">
+              <component :is="statusConfig[row.original.status].icon" :class="['h-3 w-3', statusConfig[row.original.status].class]" />
+              {{ statusConfig[row.original.status].label }}
+            </Badge>
+          </template>
+          <template #cell-actions="{ row }">
+            <div class="flex justify-end gap-1">
+              <Button variant="ghost" size="sm" @click="handleViewDetail(row.original)"><EyeIcon class="mr-1 h-3 w-3" />详情</Button>
+              <Button variant="ghost" size="sm"><PencilSquareIcon class="mr-1 h-3 w-3" />编辑</Button>
+              <Button variant="ghost" size="sm" @click="toggleStatus(row.original)"><BoltIcon class="mr-1 h-3 w-3" />{{ row.original.status === 'online' ? '停用' : '启用' }}</Button>
+            </div>
+          </template>
+        </DataTable>
       </CardContent>
     </Card>
 

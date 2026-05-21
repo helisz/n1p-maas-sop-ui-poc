@@ -3,7 +3,7 @@
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { cn } from '@/lib/utils';
-import { Squares2X2Icon, CubeIcon, ShoppingCartIcon, SparklesIcon, WalletIcon, ReceiptPercentIcon, DocumentTextIcon, BuildingOffice2Icon, PresentationChartLineIcon, ChevronLeftIcon, MagnifyingGlassIcon, CheckBadgeIcon, UserGroupIcon, CpuChipIcon } from '@heroicons/vue/24/outline';
+import { XMarkIcon, Squares2X2Icon, CubeIcon, ShoppingCartIcon, SparklesIcon, WalletIcon, ReceiptPercentIcon, DocumentTextIcon, BuildingOffice2Icon, PresentationChartLineIcon, ChevronLeftIcon, MagnifyingGlassIcon, CheckBadgeIcon, UserGroupIcon, CpuChipIcon } from '@heroicons/vue/24/outline';
 
 const props = withDefaults(
   defineProps<{
