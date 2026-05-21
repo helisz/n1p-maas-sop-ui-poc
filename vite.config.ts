@@ -3,11 +3,34 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath, URL } from 'node:url';
+import VueRouter from 'unplugin-vue-router/vite';
 import Components from 'unplugin-vue-components/vite';
 import AutoImport from 'unplugin-auto-import/vite';
 
 export default defineConfig({
   plugins: [
+    VueRouter({
+      routesFolder: 'src/views',
+      extensions: ['.vue'],
+      dts: false,
+
+      // 1. 修改路由名称 (Name)
+      routeNameTransformer: (name) => {
+        return name.replace(/View$/, '');
+      },
+
+      // 2. 修改路由路径 (Path)
+      extendRoute(route) {
+        // 将末尾的 View 或 view 删掉（例如 /homeview 变为 /home）
+        if (route.path.toLowerCase().endsWith('view')) {
+          route.path = route.path.replace(/[Vv]iew$/, '');
+        }
+        // 如果处理后变成空字符串（比如旧的是 /View），则修复为根路径 /
+        if (route.path === '') {
+          route.path = '/';
+        }
+      },
+    }),
     vue(),
     tailwindcss(),
     AutoImport({
