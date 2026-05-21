@@ -1,3 +1,11 @@
+<route lang="yaml">
+path: /home
+name: Home
+alias: /
+meta:
+  requiresAuth: false
+</route>
+
 <!-- [AI_START TIMESTAMP=2025-06-20 06:00:00] -->
 <script setup lang="ts">
 import { ref } from 'vue';
