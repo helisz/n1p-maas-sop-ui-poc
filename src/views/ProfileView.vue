@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { ArrowLeftIcon } from '@heroicons/vue/24/outline';
-import Header from '@/components/portal/Header.vue';
-import ProfileContent from '@/components/portal/ProfileContent.vue';
 
 const router = useRouter();
 
