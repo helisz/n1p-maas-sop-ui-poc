@@ -1,7 +1,13 @@
 <!-- [AI_START TIMESTAMP=2025-06-20 06:45:00] -->
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { MagnifyingGlassIcon, BuildingOffice2Icon, CheckCircleIcon, ClockIcon, XCircleIcon, EyeIcon, ShieldCheckIcon, LockClosedIcon } from '@heroicons/vue/24/outline';
+definePage({
+  meta: {
+    requiresAuth: true,
+    layout: 'PortalLayout',
+  },
+});
+
+import { MagnifyingGlassIcon, CheckCircleIcon, ClockIcon, XCircleIcon, EyeIcon, ShieldCheckIcon, LockClosedIcon } from '@heroicons/vue/24/outline';
 
 const enterprises = [
   {

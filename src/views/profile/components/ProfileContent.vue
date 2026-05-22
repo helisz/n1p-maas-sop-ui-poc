@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { UserIcon, EnvelopeIcon, PhoneIcon, BuildingOffice2Icon, ShieldCheckIcon, KeyIcon, PencilSquareIcon, CheckCircleIcon, DevicePhoneMobileIcon, ComputerDesktopIcon, LockClosedIcon, CameraIcon } from '@heroicons/vue/24/outline';
 

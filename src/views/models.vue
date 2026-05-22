@@ -1,9 +1,15 @@
 <!-- [AI_START TIMESTAMP=2025-07-18 12:30:00] -->
 <script setup lang="ts">
-import { ref, computed, h } from 'vue';
+definePage({
+  meta: {
+    requiresAuth: true,
+    layout: 'PortalLayout',
+  },
+});
+
 import { createColumnHelper } from '@tanstack/vue-table';
 import { cn } from '@/lib/utils';
-import { MagnifyingGlassIcon, SparklesIcon, CheckCircleIcon, ExclamationTriangleIcon, XCircleIcon, EyeIcon, PencilSquareIcon, BoltIcon, PlusIcon, ChevronRightIcon, ChevronLeftIcon, CpuChipIcon, RectangleStackIcon, HashtagIcon, GlobeAltIcon, CurrencyDollarIcon } from '@heroicons/vue/24/outline';
+import { MagnifyingGlassIcon, CheckCircleIcon, ExclamationTriangleIcon, XCircleIcon, EyeIcon, PencilSquareIcon, BoltIcon, PlusIcon, ChevronRightIcon, ChevronLeftIcon, CpuChipIcon, RectangleStackIcon, HashtagIcon, GlobeAltIcon, CurrencyDollarIcon } from '@heroicons/vue/24/outline';
 
 interface TierPricing {
   input: number;

@@ -1,6 +1,12 @@
 <!-- [AI_START TIMESTAMP=2025-07-16 06:20:00] -->
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+definePage({
+  meta: {
+    requiresAuth: true,
+    layout: 'PortalLayout',
+  },
+});
+
 import { MagnifyingGlassIcon, EllipsisHorizontalIcon, EyeIcon, CheckCircleIcon, ExclamationTriangleIcon, XCircleIcon, ArrowPathIcon, BuildingOffice2Icon, CubeIcon, ShieldCheckIcon, PauseCircleIcon } from '@heroicons/vue/24/outline';
 
 interface SubscribedPackage {

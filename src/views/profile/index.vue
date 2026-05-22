@@ -13,15 +13,16 @@ function goDashboard() {
   <div class="flex h-screen flex-col overflow-hidden">
     <Header>
       <template #logo>
-        <div class="flex h-14 items-center justify-between px-4">
-          <div class="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-8 w-8 rounded-lg">
-              <rect width="32" height="32" rx="8" fill="#333" />
+        <!-- Logo -->
+        <div class="flex h-[3.5rem] items-center justify-between px-4">
+          <div class="flex items-center gap-2.5 overflow-hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-7 w-7 shrink-0">
+              <rect width="32" height="32" rx="6" fill="#3841D8" />
               <path d="M16 7L7 12.5l9 5.5 9-5.5z" fill="#fff" opacity="0.95" />
-              <path d="M7 16.5l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.55" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M7 20l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.3" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M7 16.5l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.6" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M7 20l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.35" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
-            <span class="text-sm font-semibold whitespace-nowrap"> 应用运营门户 </span>
+            <span class="text-foreground text-sm font-semibold tracking-tight whitespace-nowrap">企业统一服务门户 <span class="text-red-600">POC</span></span>
           </div>
         </div>
       </template>

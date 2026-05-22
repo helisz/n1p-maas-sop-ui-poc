@@ -1,6 +1,12 @@
 <!-- [AI_START TIMESTAMP=2025-06-20 06:40:00] -->
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+definePage({
+  meta: {
+    requiresAuth: true,
+    layout: 'PortalLayout',
+  },
+});
+
 import { MagnifyingGlassIcon, FunnelIcon, EllipsisHorizontalIcon, EyeIcon, CreditCardIcon, XMarkIcon, CheckCircleIcon, ClockIcon, XCircleIcon, ArrowPathIcon } from '@heroicons/vue/24/outline';
 
 const orders = [

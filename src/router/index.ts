@@ -1,7 +1,5 @@
-// [AI_START TIMESTAMP=2025-06-20 06:30:00]
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
-
 import { routes } from 'vue-router/auto-routes';
 
 const router = createRouter({
@@ -12,14 +10,16 @@ const router = createRouter({
 router.beforeEach((to, _from, next) => {
   const auth = useAuthStore();
 
+  // 1. Redirect to the unauthenticated login path safely using path notation
   if (to.meta.requiresAuth && !auth.isLoggedIn) {
-    next({ name: 'Login' });
-  } else if (!to.meta.requiresAuth && auth.isLoggedIn && to.name === 'Login') {
-    next({ name: 'Dashboard' });
+    next({ path: '/login' });
+  }
+  // 2. Intercept authenticated users trying to hit the login gate and bounce them to dashboard
+  else if (!to.meta.requiresAuth && auth.isLoggedIn && to.path === '/login') {
+    next({ path: '/dashboard' });
   } else {
     next();
   }
 });
 
 export default router;
-// [AI_END LINES=71 TIMESTAMP=2025-06-20 06:30:00]

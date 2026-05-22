@@ -1,6 +1,12 @@
 <!-- [AI_START TIMESTAMP=2025-06-20 06:45:00] -->
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+definePage({
+  meta: {
+    requiresAuth: true,
+    layout: 'PortalLayout',
+  },
+});
+
 import { MagnifyingGlassIcon, ArrowDownTrayIcon, FunnelIcon, ArrowRightEndOnRectangleIcon, ShoppingCartIcon, CreditCardIcon, ServerIcon, KeyIcon, ShieldCheckIcon, WrenchIcon, EyeIcon, Cog6ToothIcon } from '@heroicons/vue/24/outline';
 
 const auditLogs = [

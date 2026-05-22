@@ -1,6 +1,12 @@
 <!-- [AI_START TIMESTAMP=2025-06-20 08:00:00] -->
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+definePage({
+  meta: {
+    requiresAuth: true,
+    layout: 'PortalLayout',
+  },
+});
+
 import { Bar } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
 import { PresentationChartLineIcon, ArrowTrendingUpIcon, UsersIcon, ClockIcon, MagnifyingGlassIcon, SparklesIcon, ExclamationTriangleIcon, CheckCircleIcon } from '@heroicons/vue/24/outline';

@@ -1,6 +1,12 @@
 <!-- [AI_START TIMESTAMP=2025-07-18 14:00:00] -->
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+definePage({
+  meta: {
+    requiresAuth: true,
+    layout: 'PortalLayout',
+  },
+});
+
 import { MagnifyingGlassIcon, UserIcon, CheckCircleIcon, XCircleIcon, EyeIcon, EnvelopeIcon, PhoneIcon, BuildingOffice2Icon, ClockIcon, NoSymbolIcon, PlayIcon } from '@heroicons/vue/24/outline';
 
 interface UserAccount {
