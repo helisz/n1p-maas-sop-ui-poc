@@ -1,4 +1,4 @@
-<!-- [AI_START TIMESTAMP=2025-06-20 08:00:00] -->
+﻿<!-- [AI_START TIMESTAMP=2025-08-12 08:00:00] -->
 <script setup lang="ts">
 definePage({
   meta: {
@@ -7,591 +7,415 @@ definePage({
   },
 });
 
-import { Bar } from 'vue-chartjs';
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
-import { PresentationChartLineIcon, ArrowTrendingUpIcon, UsersIcon, ClockIcon, MagnifyingGlassIcon, SparklesIcon, ExclamationTriangleIcon, CheckCircleIcon } from '@heroicons/vue/24/outline';
+import { ArrowDownTrayIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline';
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+interface UsageRecord {
+  id: string;
+  apiKeyName: string;
+  model: string;
+  inputTokens: number;
+  outputTokens: number;
+  totalTokens: number;
+  usageTime: string;
+  result: 'success' | 'failed';
+  resultMessage?: string;
+}
 
-const stats = [
-  { title: '今日总调用', value: '128,456', icon: PresentationChartLineIcon, change: '+8.5%' },
-  { title: '本周总调用', value: '856,432', icon: ArrowTrendingUpIcon, change: '+12.3%' },
-  { title: '活跃客户数', value: '45', icon: UsersIcon, change: '+2' },
-  { title: '平均延迟', value: '245', unit: 'ms', icon: ClockIcon, change: '-5%' },
+const allRecords: UsageRecord[] = [
+  { id: '1', apiKeyName: '生产环境密钥', model: 'gpt-4o', inputTokens: 1200, outputTokens: 850, totalTokens: 2050, usageTime: '2025-08-10 14:32:15', result: 'success' },
+  { id: '2', apiKeyName: '测试环境密钥', model: 'gpt-4o-mini', inputTokens: 340, outputTokens: 120, totalTokens: 460, usageTime: '2025-08-10 13:15:30', result: 'success' },
+  { id: '3', apiKeyName: '生产环境密钥', model: 'gpt-4o', inputTokens: 5600, outputTokens: 2100, totalTokens: 7700, usageTime: '2025-08-10 11:45:00', result: 'failed', resultMessage: 'Rate limit exceeded' },
+  { id: '4', apiKeyName: '生产环境密钥', model: 'claude-3-5-sonnet', inputTokens: 890, outputTokens: 430, totalTokens: 1320, usageTime: '2025-08-09 18:22:10', result: 'success' },
+  { id: '5', apiKeyName: '测试环境密钥', model: 'gpt-4o', inputTokens: 120, outputTokens: 60, totalTokens: 180, usageTime: '2025-08-09 16:05:45', result: 'success' },
+  { id: '6', apiKeyName: '生产环境密钥', model: 'gpt-4o', inputTokens: 4500, outputTokens: 1800, totalTokens: 6300, usageTime: '2025-08-09 10:30:00', result: 'success' },
+  { id: '7', apiKeyName: '测试环境密钥', model: 'claude-3-5-sonnet', inputTokens: 2300, outputTokens: 980, totalTokens: 3280, usageTime: '2025-08-08 09:12:20', result: 'failed', resultMessage: 'Token limit exceeded' },
+  { id: '8', apiKeyName: '生产环境密钥', model: 'gpt-4o-mini', inputTokens: 560, outputTokens: 210, totalTokens: 770, usageTime: '2025-08-08 08:45:30', result: 'success' },
+  { id: '9', apiKeyName: '测试环境密钥', model: 'gpt-4o', inputTokens: 780, outputTokens: 340, totalTokens: 1120, usageTime: '2025-08-07 20:18:00', result: 'success' },
+  { id: '10', apiKeyName: '生产环境密钥', model: 'claude-3-5-sonnet', inputTokens: 3200, outputTokens: 1500, totalTokens: 4700, usageTime: '2025-08-07 15:40:10', result: 'success' },
+  { id: '11', apiKeyName: '测试环境密钥', model: 'gpt-4o-mini', inputTokens: 90, outputTokens: 40, totalTokens: 130, usageTime: '2025-08-06 12:25:00', result: 'success' },
+  { id: '12', apiKeyName: '生产环境密钥', model: 'gpt-4o', inputTokens: 2100, outputTokens: 890, totalTokens: 2990, usageTime: '2025-08-06 08:10:15', result: 'success' },
+  { id: '13', apiKeyName: '测试环境密钥', model: 'gpt-4o', inputTokens: 1500, outputTokens: 600, totalTokens: 2100, usageTime: '2025-08-05 19:55:30', result: 'failed', resultMessage: 'Invalid API key' },
+  { id: '14', apiKeyName: '生产环境密钥', model: 'claude-3-5-sonnet', inputTokens: 670, outputTokens: 280, totalTokens: 950, usageTime: '2025-08-05 14:20:00', result: 'success' },
+  { id: '15', apiKeyName: '测试环境密钥', model: 'gpt-4o-mini', inputTokens: 420, outputTokens: 180, totalTokens: 600, usageTime: '2025-08-04 11:05:00', result: 'success' },
+  { id: '16', apiKeyName: '生产环境密钥', model: 'gpt-4o', inputTokens: 5400, outputTokens: 2200, totalTokens: 7600, usageTime: '2025-08-04 07:30:00', result: 'success' },
+  { id: '17', apiKeyName: '测试环境密钥', model: 'claude-3-5-sonnet', inputTokens: 1100, outputTokens: 450, totalTokens: 1550, usageTime: '2025-08-03 22:15:00', result: 'success' },
+  { id: '18', apiKeyName: '生产环境密钥', model: 'gpt-4o-mini', inputTokens: 230, outputTokens: 90, totalTokens: 320, usageTime: '2025-08-03 16:40:00', result: 'success' },
+  { id: '19', apiKeyName: '测试环境密钥', model: 'gpt-4o', inputTokens: 890, outputTokens: 360, totalTokens: 1250, usageTime: '2025-08-02 10:20:00', result: 'success' },
+  { id: '20', apiKeyName: '生产环境密钥', model: 'claude-3-5-sonnet', inputTokens: 3100, outputTokens: 1300, totalTokens: 4400, usageTime: '2025-08-02 08:00:00', result: 'success' },
+  { id: '21', apiKeyName: '测试环境密钥', model: 'gpt-4o-mini', inputTokens: 180, outputTokens: 70, totalTokens: 250, usageTime: '2025-08-01 21:45:00', result: 'failed', resultMessage: 'Timeout' },
+  { id: '22', apiKeyName: '生产环境密钥', model: 'gpt-4o', inputTokens: 4200, outputTokens: 1900, totalTokens: 6100, usageTime: '2025-08-01 15:10:00', result: 'success' },
+  { id: '23', apiKeyName: '测试环境密钥', model: 'claude-3-5-sonnet', inputTokens: 750, outputTokens: 300, totalTokens: 1050, usageTime: '2025-08-01 09:30:00', result: 'success' },
+  { id: '24', apiKeyName: '生产环境密钥', model: 'gpt-4o-mini', inputTokens: 340, outputTokens: 140, totalTokens: 480, usageTime: '2025-07-31 18:00:00', result: 'success' },
+  { id: '25', apiKeyName: '测试环境密钥', model: 'gpt-4o', inputTokens: 2600, outputTokens: 1100, totalTokens: 3700, usageTime: '2025-07-31 14:25:00', result: 'success' },
 ];
 
-const trendDataMap: Record<string, { date: string; calls: number }[]> = {
-  '7d': [
-    { date: '03-10', calls: 112000 },
-    { date: '03-11', calls: 128000 },
-    { date: '03-12', calls: 135000 },
-    { date: '03-13', calls: 142000 },
-    { date: '03-14', calls: 138000 },
-    { date: '03-15', calls: 156000 },
-    { date: '03-16', calls: 148000 },
-  ],
-  '30d': [
-    { date: '02-15', calls: 85000 },
-    { date: '02-17', calls: 92000 },
-    { date: '02-19', calls: 88000 },
-    { date: '02-21', calls: 105000 },
-    { date: '02-23', calls: 98000 },
-    { date: '02-25', calls: 115000 },
-    { date: '02-27', calls: 108000 },
-    { date: '03-01', calls: 125000 },
-    { date: '03-03', calls: 118000 },
-    { date: '03-05', calls: 132000 },
-    { date: '03-07', calls: 128000 },
-    { date: '03-09', calls: 135000 },
-    { date: '03-11', calls: 142000 },
-    { date: '03-13', calls: 148000 },
-    { date: '03-15', calls: 156000 },
-  ],
-  '90d': [
-    { date: '12-18', calls: 65000 },
-    { date: '12-23', calls: 72000 },
-    { date: '12-28', calls: 78000 },
-    { date: '01-02', calls: 82000 },
-    { date: '01-07', calls: 88000 },
-    { date: '01-12', calls: 95000 },
-    { date: '01-17', calls: 92000 },
-    { date: '01-22', calls: 105000 },
-    { date: '01-27', calls: 110000 },
-    { date: '02-01', calls: 108000 },
-    { date: '02-06', calls: 115000 },
-    { date: '02-11', calls: 122000 },
-    { date: '02-16', calls: 118000 },
-    { date: '02-21', calls: 128000 },
-    { date: '02-26', calls: 135000 },
-    { date: '03-03', calls: 132000 },
-    { date: '03-08', calls: 142000 },
-    { date: '03-13', calls: 148000 },
-    { date: '03-16', calls: 156000 },
-  ],
-};
+const apiKeyOptions = ['全部', '生产环境密钥', '测试环境密钥'];
 
-const modelDataMap: Record<
-  string,
-  {
-    model: string;
-    provider: string;
-    totalCalls: number;
-    tokens: string;
-    avgLatency: string;
-    status: 'normal' | 'warning';
-    errorRate: string;
-  }[]
-> = {
-  '7d': [
-    {
-      model: 'GPT-4o',
-      provider: 'OpenAI',
-      totalCalls: 98000,
-      tokens: '260M',
-      avgLatency: '210ms',
-      status: 'normal',
-      errorRate: '0.1%',
-    },
-    {
-      model: 'Claude 3.5 Sonnet',
-      provider: 'Anthropic',
-      totalCalls: 52000,
-      tokens: '150M',
-      avgLatency: '320ms',
-      status: 'normal',
-      errorRate: '0.2%',
-    },
-    {
-      model: 'DeepSeek V3',
-      provider: 'DeepSeek',
-      totalCalls: 41000,
-      tokens: '92M',
-      avgLatency: '180ms',
-      status: 'normal',
-      errorRate: '0.05%',
-    },
-    {
-      model: 'Gemini 1.5 Pro',
-      provider: 'Google',
-      totalCalls: 23000,
-      tokens: '72M',
-      avgLatency: '280ms',
-      status: 'warning',
-      errorRate: '0.8%',
-    },
-    {
-      model: 'Qwen2.5 72B',
-      provider: 'Alibaba Cloud',
-      totalCalls: 18000,
-      tokens: '51M',
-      avgLatency: '260ms',
-      status: 'normal',
-      errorRate: '0.15%',
-    },
-  ],
-  '30d': [
-    {
-      model: 'GPT-4o',
-      provider: 'OpenAI',
-      totalCalls: 456000,
-      tokens: '1.2B',
-      avgLatency: '210ms',
-      status: 'normal',
-      errorRate: '0.1%',
-    },
-    {
-      model: 'Claude 3.5 Sonnet',
-      provider: 'Anthropic',
-      totalCalls: 234000,
-      tokens: '680M',
-      avgLatency: '320ms',
-      status: 'normal',
-      errorRate: '0.2%',
-    },
-    {
-      model: 'DeepSeek V3',
-      provider: 'DeepSeek',
-      totalCalls: 189000,
-      tokens: '420M',
-      avgLatency: '180ms',
-      status: 'normal',
-      errorRate: '0.05%',
-    },
-    {
-      model: 'Gemini 1.5 Pro',
-      provider: 'Google',
-      totalCalls: 98000,
-      tokens: '310M',
-      avgLatency: '280ms',
-      status: 'warning',
-      errorRate: '0.8%',
-    },
-    {
-      model: 'Qwen2.5 72B',
-      provider: 'Alibaba Cloud',
-      totalCalls: 67000,
-      tokens: '190M',
-      avgLatency: '260ms',
-      status: 'normal',
-      errorRate: '0.15%',
-    },
-  ],
-  '90d': [
-    {
-      model: 'GPT-4o',
-      provider: 'OpenAI',
-      totalCalls: 1380000,
-      tokens: '3.6B',
-      avgLatency: '210ms',
-      status: 'normal',
-      errorRate: '0.1%',
-    },
-    {
-      model: 'Claude 3.5 Sonnet',
-      provider: 'Anthropic',
-      totalCalls: 720000,
-      tokens: '2.1B',
-      avgLatency: '320ms',
-      status: 'normal',
-      errorRate: '0.2%',
-    },
-    {
-      model: 'DeepSeek V3',
-      provider: 'DeepSeek',
-      totalCalls: 580000,
-      tokens: '1.3B',
-      avgLatency: '180ms',
-      status: 'normal',
-      errorRate: '0.05%',
-    },
-    {
-      model: 'Gemini 1.5 Pro',
-      provider: 'Google',
-      totalCalls: 310000,
-      tokens: '980M',
-      avgLatency: '280ms',
-      status: 'warning',
-      errorRate: '0.8%',
-    },
-    {
-      model: 'Qwen2.5 72B',
-      provider: 'Alibaba Cloud',
-      totalCalls: 210000,
-      tokens: '590M',
-      avgLatency: '260ms',
-      status: 'normal',
-      errorRate: '0.15%',
-    },
-  ],
-};
+const filterApiKey = ref('全部');
+const filterStartDate = ref('');
+const filterEndDate = ref('');
 
-const customerDataMap: Record<
-  string,
-  {
-    company: string;
-    callsPeriod: number;
-    callsMonth: number;
-    quotaUsed: number;
-    status: 'normal' | 'warning';
-  }[]
-> = {
-  '7d': [
-    {
-      company: '华为云科技',
-      callsPeriod: 10500,
-      callsMonth: 320000,
-      quotaUsed: 85,
-      status: 'normal',
-    },
-    {
-      company: '阿里云数',
-      callsPeriod: 8900,
-      callsMonth: 280000,
-      quotaUsed: 78,
-      status: 'normal',
-    },
-    {
-      company: '腾讯云智',
-      callsPeriod: 7400,
-      callsMonth: 210000,
-      quotaUsed: 92,
-      status: 'warning',
-    },
-    {
-      company: '百度智能',
-      callsPeriod: 5200,
-      callsMonth: 150000,
-      quotaUsed: 65,
-      status: 'normal',
-    },
-    {
-      company: '字节跳动',
-      callsPeriod: 4100,
-      callsMonth: 120000,
-      quotaUsed: 45,
-      status: 'normal',
-    },
-  ],
-  '30d': [
-    {
-      company: '华为云科技',
-      callsPeriod: 320000,
-      callsMonth: 320000,
-      quotaUsed: 85,
-      status: 'normal',
-    },
-    {
-      company: '阿里云数',
-      callsPeriod: 280000,
-      callsMonth: 280000,
-      quotaUsed: 78,
-      status: 'normal',
-    },
-    {
-      company: '腾讯云智',
-      callsPeriod: 210000,
-      callsMonth: 210000,
-      quotaUsed: 92,
-      status: 'warning',
-    },
-    {
-      company: '百度智能',
-      callsPeriod: 150000,
-      callsMonth: 150000,
-      quotaUsed: 65,
-      status: 'normal',
-    },
-    {
-      company: '字节跳动',
-      callsPeriod: 120000,
-      callsMonth: 120000,
-      quotaUsed: 45,
-      status: 'normal',
-    },
-  ],
-  '90d': [
-    {
-      company: '华为云科技',
-      callsPeriod: 980000,
-      callsMonth: 320000,
-      quotaUsed: 85,
-      status: 'normal',
-    },
-    {
-      company: '阿里云数',
-      callsPeriod: 860000,
-      callsMonth: 280000,
-      quotaUsed: 78,
-      status: 'normal',
-    },
-    {
-      company: '腾讯云智',
-      callsPeriod: 640000,
-      callsMonth: 210000,
-      quotaUsed: 92,
-      status: 'warning',
-    },
-    {
-      company: '百度智能',
-      callsPeriod: 450000,
-      callsMonth: 150000,
-      quotaUsed: 65,
-      status: 'normal',
-    },
-    {
-      company: '字节跳动',
-      callsPeriod: 360000,
-      callsMonth: 120000,
-      quotaUsed: 45,
-      status: 'normal',
-    },
-  ],
-};
+const pageSize = 10;
+const currentPage = ref(1);
 
-const trendRange = ref('7d');
-const modelRange = ref('30d');
-const customerRange = ref('30d');
+const filteredRecords = computed(() => {
+  return allRecords.filter((record) => {
+    if (filterApiKey.value !== '全部' && record.apiKeyName !== filterApiKey.value) {
+      return false;
+    }
+    if (filterStartDate.value) {
+      const start = new Date(filterStartDate.value + 'T00:00:00');
+      const recordDate = new Date(record.usageTime.replace(' ', 'T'));
+      if (recordDate < start) return false;
+    }
+    if (filterEndDate.value) {
+      const end = new Date(filterEndDate.value + 'T23:59:59');
+      const recordDate = new Date(record.usageTime.replace(' ', 'T'));
+      if (recordDate > end) return false;
+    }
+    return true;
+  });
+});
 
-const trendData = computed(() => trendDataMap[trendRange.value] || trendDataMap['7d']);
-const modelUsages = computed(() => modelDataMap[modelRange.value] || modelDataMap['30d']);
-const customerUsages = computed(() => customerDataMap[customerRange.value] || customerDataMap['30d']);
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredRecords.value.length / pageSize)));
 
-const chartData = computed(() => ({
-  labels: trendData.value.map((d) => d.date),
-  datasets: [
-    {
-      label: 'API 调用量',
-      data: trendData.value.map((d) => d.calls),
-      backgroundColor: '#374151',
-      borderColor: '#374151',
-      borderWidth: 0,
-      borderRadius: 0,
-      barPercentage: 0.6,
-      categoryPercentage: 0.8,
-    },
-  ],
-}));
+const paginatedRecords = computed(() => {
+  const start = (currentPage.value - 1) * pageSize;
+  return filteredRecords.value.slice(start, start + pageSize);
+});
 
-const chartOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: { display: false },
-    tooltip: {
-      backgroundColor: 'rgba(0,0,0,0.85)',
-      titleColor: '#fff',
-      bodyColor: '#fff',
-      padding: 10,
-      cornerRadius: 6,
-      displayColors: false,
-      callbacks: {
-        label: (context: any) => `调用量: ${Number(context.raw).toLocaleString()}`,
-      },
-    },
-  },
-  scales: {
-    x: {
-      grid: { display: false },
-      ticks: {
-        color: '#6b7280',
-        font: { size: 11 },
-      },
-      border: { display: false },
-    },
-    y: {
-      beginAtZero: true,
-      grid: {
-        color: 'rgba(0,0,0,0.06)',
-        drawBorder: false,
-      },
-      ticks: {
-        color: '#6b7280',
-        font: { size: 11 },
-        callback: (value: any) => `${Number(value) / 1000}k`,
-      },
-      border: { display: false },
-    },
-  },
-};
+function prevPage() {
+  if (currentPage.value > 1) currentPage.value--;
+}
 
-const searchQuery = ref('');
+function nextPage() {
+  if (currentPage.value < totalPages.value) currentPage.value++;
+}
 
-const filteredModels = computed(() => modelUsages.value.filter((m) => m.model.toLowerCase().includes(searchQuery.value.toLowerCase()) || m.provider.toLowerCase().includes(searchQuery.value.toLowerCase())));
+function goToPage(page: number) {
+  if (page >= 1 && page <= totalPages.value) currentPage.value = page;
+}
+
+function exportData() {
+  const headers = ['API Key 名称', '使用模型', '输入数', '输出数', '总Token数', '使用时间', '使用结果'];
+  const rows = filteredRecords.value.map((r) => [r.apiKeyName, r.model, r.inputTokens, r.outputTokens, r.totalTokens, r.usageTime, r.result === 'success' ? '成功' : `失败: ${r.resultMessage || ''}`]);
+  const csvContent = [headers.join(','), ...rows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))].join('\n');
+  const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `使用记录_${new Date().toISOString().slice(0, 10)}.csv`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+function clearFilters() {
+  filterApiKey.value = '全部';
+  filterStartDate.value = '';
+  filterEndDate.value = '';
+  currentPage.value = 1;
+}
+
+const pageNumbers = computed(() => {
+  const pages: (number | string)[] = [];
+  const maxVisible = 5;
+  if (totalPages.value <= maxVisible + 2) {
+    for (let i = 1; i <= totalPages.value; i++) pages.push(i);
+  } else {
+    if (currentPage.value <= 3) {
+      for (let i = 1; i <= 4; i++) pages.push(i);
+      pages.push('...');
+      pages.push(totalPages.value);
+    } else if (currentPage.value >= totalPages.value - 2) {
+      pages.push(1);
+      pages.push('...');
+      for (let i = totalPages.value - 3; i <= totalPages.value; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      pages.push('...');
+      for (let i = currentPage.value - 1; i <= currentPage.value + 1; i++) pages.push(i);
+      pages.push('...');
+      pages.push(totalPages.value);
+    }
+  }
+  return pages;
+});
+
+// Chart logic
+interface DailyStat {
+  date: string;
+  input: number;
+  output: number;
+  total: number;
+}
+
+const chartCanvas = ref<HTMLCanvasElement | null>(null);
+const chartContainer = ref<HTMLDivElement | null>(null);
+
+const dailyStats = computed(() => {
+  const map = new Map<string, DailyStat>();
+  filteredRecords.value.forEach((r) => {
+    const date = r.usageTime.slice(0, 10);
+    if (!map.has(date)) {
+      map.set(date, { date, input: 0, output: 0, total: 0 });
+    }
+    const stat = map.get(date)!;
+    stat.input += r.inputTokens;
+    stat.output += r.outputTokens;
+    stat.total += r.totalTokens;
+  });
+  const arr = Array.from(map.values());
+  arr.sort((a, b) => a.date.localeCompare(b.date));
+  return arr;
+});
+
+function niceStep(maxValue: number, ticks: number): number {
+  const rough = maxValue / ticks;
+  const pow10 = Math.pow(10, Math.floor(Math.log10(rough)));
+  const d = rough / pow10;
+  let nice = 1;
+  if (d < 1.5) nice = 1;
+  else if (d < 3) nice = 2;
+  else if (d < 7) nice = 5;
+  else nice = 10;
+  return nice * pow10;
+}
+
+function drawChart() {
+  const canvas = chartCanvas.value;
+  const container = chartContainer.value;
+  if (!canvas || !container) return;
+  const rect = container.getBoundingClientRect();
+  if (rect.width === 0) {
+    requestAnimationFrame(drawChart);
+    return;
+  }
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  const width = rect.width;
+  const height = 260;
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
+  canvas.style.width = `${width}px`;
+  canvas.style.height = `${height}px`;
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, width, height);
+
+  const data = dailyStats.value;
+  if (data.length === 0) return;
+
+  const padding = { top: 24, right: 16, bottom: 40, left: 56 };
+  const chartW = width - padding.left - padding.right;
+  const chartH = height - padding.top - padding.bottom;
+
+  const maxValue = Math.max(...data.map((d) => Math.max(d.input, d.output, d.total)));
+  const yTicks = 5;
+  const step = niceStep(maxValue, yTicks);
+  const yMax = step * yTicks;
+
+  // Grid & Y labels
+  ctx.strokeStyle = '#E5E7EB';
+  ctx.lineWidth = 1;
+  ctx.fillStyle = '#6B7280';
+  ctx.font = '11px system-ui, -apple-system, sans-serif';
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+
+  for (let i = 0; i <= yTicks; i++) {
+    const value = i * step;
+    const y = padding.top + chartH - (value / yMax) * chartH;
+    ctx.beginPath();
+    ctx.moveTo(padding.left, y);
+    ctx.lineTo(width - padding.right, y);
+    ctx.stroke();
+    ctx.fillText(String(Math.round(value)), padding.left - 8, y);
+  }
+
+  // Y axis line
+  ctx.strokeStyle = '#9CA3AF';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(padding.left, padding.top);
+  ctx.lineTo(padding.left, height - padding.bottom);
+  ctx.stroke();
+
+  // Bars (grouped: input, output, total)
+  const groupCount = data.length;
+  const groupGap = Math.max(8, 40 / groupCount);
+  const barGap = 2;
+  const barWidth = (chartW - (groupCount - 1) * groupGap) / groupCount / 3 - barGap;
+  const effectiveBarWidth = Math.max(4, barWidth);
+
+  const colors = ['#3B82F6', '#10B981', '#6366F1']; // blue, emerald, indigo
+
+  data.forEach((stat, gi) => {
+    const groupX = padding.left + gi * ((chartW - (groupCount - 1) * groupGap) / groupCount) + groupGap / 2;
+    const values = [stat.input, stat.output, stat.total];
+    values.forEach((val, vi) => {
+      const x = groupX + vi * (effectiveBarWidth + barGap);
+      const barHeight = (val / yMax) * chartH;
+      const y = padding.top + chartH - barHeight;
+      ctx.fillStyle = colors[vi];
+      ctx.fillRect(x, y, effectiveBarWidth, barHeight);
+    });
+
+    // Date label
+    const labelX = groupX + (effectiveBarWidth * 3 + barGap * 2) / 2;
+    ctx.fillStyle = '#6B7280';
+    ctx.font = '10px system-ui, -apple-system, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.fillText(stat.date.slice(5), labelX, height - padding.bottom + 8);
+  });
+
+  // Legend
+  const legendItems = [
+    { label: '输入数', color: colors[0] },
+    { label: '输出数', color: colors[1] },
+    { label: '总Token数', color: colors[2] },
+  ];
+  let legendX = width - padding.right;
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  for (let i = legendItems.length - 1; i >= 0; i--) {
+    const item = legendItems[i];
+    const textWidth = ctx.measureText(item.label).width;
+    legendX -= textWidth + 16;
+    ctx.fillStyle = item.color;
+    ctx.fillRect(legendX, 8, 10, 10);
+    ctx.fillStyle = '#374151';
+    ctx.font = '11px system-ui, -apple-system, sans-serif';
+    ctx.fillText(item.label, legendX + textWidth + 14, 13);
+    legendX -= 24;
+  }
+}
+
+let resizeObserver: ResizeObserver | null = null;
+
+onMounted(() => {
+  if (chartContainer.value) {
+    resizeObserver = new ResizeObserver(() => drawChart());
+    resizeObserver.observe(chartContainer.value);
+  }
+  window.addEventListener('resize', drawChart);
+});
+
+onUnmounted(() => {
+  if (resizeObserver) {
+    resizeObserver.disconnect();
+    resizeObserver = null;
+  }
+  window.removeEventListener('resize', drawChart);
+});
+
+watch([filteredRecords, chartCanvas], () => {
+  nextTick(() => {
+    requestAnimationFrame(drawChart);
+  });
+});
 </script>
 
 <template>
   <div class="space-y-6">
     <div>
-      <h2 class="text-foreground text-2xl font-semibold">用量监控</h2>
-      <p class="text-muted-foreground">实时监控平台 API 调用量与各客户用量分布</p>
+      <h2 class="text-foreground text-2xl font-semibold">使用记录</h2>
+      <p class="text-muted-foreground">查看 API 密钥的详细调用记录</p>
     </div>
 
-    <!-- Stats -->
-    <div class="grid gap-4 md:grid-cols-4">
-      <Card v-for="stat in stats" :key="stat.title">
-        <CardHeader class="pb-2">
-          <CardTitle class="text-muted-foreground text-sm font-medium">{{ stat.title }}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div class="flex items-baseline gap-1">
-            <span class="text-2xl font-bold">{{ stat.value }}</span>
-            <span v-if="stat.unit" class="text-muted-foreground text-sm">{{ stat.unit }}</span>
-          </div>
-          <div class="mt-1 text-xs text-green-500">{{ stat.change }}</div>
-        </CardContent>
-      </Card>
+    <!-- Filters -->
+    <div class="flex flex-wrap items-end gap-4">
+      <div class="space-y-2">
+        <Label class="text-xs">API Key 名称</Label>
+        <Select v-model="filterApiKey">
+          <SelectTrigger class="w-40">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem v-for="opt in apiKeyOptions" :key="opt" :value="opt">{{ opt }}</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div class="space-y-2">
+        <Label class="text-xs">开始日期</Label>
+        <Input type="date" v-model="filterStartDate" class="w-40" />
+      </div>
+
+      <div class="space-y-2">
+        <Label class="text-xs">结束日期</Label>
+        <Input type="date" v-model="filterEndDate" class="w-40" />
+      </div>
+
+      <div class="flex gap-2">
+        <Button variant="outline" size="sm" @click="clearFilters">重置</Button>
+        <Button size="sm" @click="exportData"><ArrowDownTrayIcon class="mr-1 h-4 w-4" />导出</Button>
+      </div>
     </div>
 
-    <!-- Daily Trend -->
-    <Card>
-      <CardHeader>
-        <div class="flex items-center justify-between">
-          <div>
-            <CardTitle>调用趋势</CardTitle>
-            <CardDescription>平台每日 API 调用总量</CardDescription>
-          </div>
-          <Select v-model="trendRange">
-            <SelectTrigger class="w-28">
-              <SelectValue placeholder="选择时间范围" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="7d">近7日</SelectItem>
-              <SelectItem value="30d">近30日</SelectItem>
-              <SelectItem value="90d">近90日</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div class="relative h-96">
-          <Bar :data="chartData" :options="chartOptions" class="w-full" style="display: block; width: 100%; height: 100%" />
-        </div>
-      </CardContent>
-    </Card>
+    <!-- Chart -->
+    <div ref="chartContainer" class="w-full my-2">
+      <canvas ref="chartCanvas" />
+    </div>
 
-    <!-- Model Usage -->
+    <!-- Table -->
     <Card>
-      <CardHeader>
-        <div class="flex items-center justify-between">
-          <div>
-            <CardTitle>模型用量排行</CardTitle>
-            <CardDescription>各模型累计调用统计</CardDescription>
-          </div>
-          <div class="flex items-center gap-3">
-            <div class="relative">
-              <MagnifyingGlassIcon class="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
-              <Input v-model="searchQuery" placeholder="搜索模型..." class="w-64 pl-8" />
-            </div>
-            <Select v-model="modelRange">
-              <SelectTrigger class="w-28">
-                <SelectValue placeholder="选择时间范围" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="7d">近7日</SelectItem>
-                <SelectItem value="30d">近30日</SelectItem>
-                <SelectItem value="90d">近90日</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
+      <CardContent class="px-3">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>模型名称</TableHead>
-              <TableHead>提供商</TableHead>
-              <TableHead>总调用量</TableHead>
-              <TableHead>Token 消耗</TableHead>
-              <TableHead>平均延迟</TableHead>
-              <TableHead>错误率</TableHead>
-              <TableHead>状态</TableHead>
+              <TableHead>API Key名称</TableHead>
+              <TableHead>使用模型</TableHead>
+              <TableHead class="text-right">输入数</TableHead>
+              <TableHead class="text-right">输出数</TableHead>
+              <TableHead class="text-right">总Token数</TableHead>
+              <TableHead>使用时间</TableHead>
+              <TableHead>使用结果</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow v-for="m in filteredModels" :key="m.model">
-              <TableCell class="font-medium">{{ m.model }}</TableCell>
-              <TableCell>{{ m.provider }}</TableCell>
-              <TableCell>{{ m.totalCalls.toLocaleString() }}</TableCell>
-              <TableCell>{{ m.tokens }}</TableCell>
-              <TableCell>{{ m.avgLatency }}</TableCell>
-              <TableCell>{{ m.errorRate }}</TableCell>
+            <TableRow v-for="record in paginatedRecords" :key="record.id">
+              <TableCell class="font-medium">{{ record.apiKeyName }}</TableCell>
+              <TableCell>{{ record.model }}</TableCell>
+              <TableCell class="text-right">{{ record.inputTokens.toLocaleString() }}</TableCell>
+              <TableCell class="text-right">{{ record.outputTokens.toLocaleString() }}</TableCell>
+              <TableCell class="text-right">{{ record.totalTokens.toLocaleString() }}</TableCell>
+              <TableCell class="text-muted-foreground">{{ record.usageTime }}</TableCell>
               <TableCell>
-                <Badge v-if="m.status === 'normal'" variant="outline" class="gap-1"> <CheckCircleIcon class="h-3 w-3 text-green-500" />正常 </Badge>
-                <Badge v-else variant="outline" class="gap-1"> <ExclamationTriangleIcon class="h-3 w-3 text-yellow-500" />告警 </Badge>
+                <Badge v-if="record.result === 'success'" variant="outline" class="gap-1 text-green-600">
+                  <span class="h-1.5 w-1.5 rounded-full bg-green-500" />
+                  成功
+                </Badge>
+                <Badge v-else variant="outline" class="gap-1 text-red-600">
+                  <span class="h-1.5 w-1.5 rounded-full bg-red-500" />
+                  失败
+                </Badge>
               </TableCell>
+            </TableRow>
+            <TableRow v-if="paginatedRecords.length === 0">
+              <TableCell colspan="7" class="text-muted-foreground py-8 text-center"> 暂无记录 </TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </CardContent>
-    </Card>
 
-    <!-- Customer Usage TOP -->
-    <Card>
-      <CardHeader>
-        <div class="flex items-center justify-between">
-          <div>
-            <CardTitle>客户用量 TOP5</CardTitle>
-            <CardDescription>调用量最高的企业客户</CardDescription>
-          </div>
-          <Select v-model="customerRange">
-            <SelectTrigger class="w-28">
-              <SelectValue placeholder="选择时间范围" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="7d">近7日</SelectItem>
-              <SelectItem value="30d">近30日</SelectItem>
-              <SelectItem value="90d">近90日</SelectItem>
-            </SelectContent>
-          </Select>
+      <!-- Pagination -->
+      <CardFooter class="flex items-center justify-between border-t px-6 py-4">
+        <div class="text-muted-foreground text-sm">共 {{ filteredRecords.length }} 条记录，第 {{ currentPage }} / {{ totalPages }} 页</div>
+        <div class="flex items-center gap-1">
+          <Button variant="outline" size="icon" class="h-8 w-8" :disabled="currentPage === 1" @click="prevPage">
+            <ChevronLeftIcon class="h-4 w-4" />
+          </Button>
+          <Button v-for="page in pageNumbers" :key="page" variant="outline" size="sm" class="h-8 w-8 px-0" :class="page === currentPage ? 'bg-accent text-accent-foreground font-medium' : ''" :disabled="page === '...'" @click="typeof page === 'number' && goToPage(page)">
+            {{ page }}
+          </Button>
+          <Button variant="outline" size="icon" class="h-8 w-8" :disabled="currentPage === totalPages" @click="nextPage">
+            <ChevronRightIcon class="h-4 w-4" />
+          </Button>
         </div>
-      </CardHeader>
-      <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>企业名称</TableHead>
-              <TableHead>当前周期调用</TableHead>
-              <TableHead>本月累计</TableHead>
-              <TableHead>配额使用率</TableHead>
-              <TableHead>状态</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow v-for="c in customerUsages" :key="c.company">
-              <TableCell class="font-medium">{{ c.company }}</TableCell>
-              <TableCell>{{ c.callsPeriod.toLocaleString() }}</TableCell>
-              <TableCell>{{ c.callsMonth.toLocaleString() }}</TableCell>
-              <TableCell>
-                <div class="flex items-center gap-2">
-                  <div class="bg-muted h-2 w-24 overflow-hidden rounded-full">
-                    <div class="bg-primary h-full rounded-full" :style="{ width: c.quotaUsed + '%' }" />
-                  </div>
-                  <span class="text-xs">{{ c.quotaUsed }}%</span>
-                </div>
-              </TableCell>
-              <TableCell>
-                <Badge v-if="c.status === 'normal'" variant="outline" class="gap-1"> <CheckCircleIcon class="h-3 w-3 text-green-500" />正常 </Badge>
-                <Badge v-else variant="outline" class="gap-1"> <ExclamationTriangleIcon class="h-3 w-3 text-yellow-500" />预警 </Badge>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </CardContent>
+      </CardFooter>
     </Card>
   </div>
 </template>
-<style scoped>
-/* Prevent Chart.js canvas from creating scrollbars */
-:deep(.chart-container) {
-  position: relative;
-  overflow: hidden;
-}
-
-:deep(.chart-container canvas) {
-  max-width: 100% !important;
-  height: auto !important;
-  overflow: hidden !important;
-}
-</style>
-<!-- [AI_END LINES=220 TIMESTAMP=2025-06-20 08:00:00] -->
+<!-- [AI_END LINES=310 TIMESTAMP=2025-08-12 08:00:00] -->
