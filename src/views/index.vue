@@ -24,7 +24,7 @@ async function handleLogin() {
 <template>
   <div class="flex min-h-screen w-full">
     <!-- Left Panel: Black background, platform introduction -->
-    <div class="relative hidden flex-col justify-between overflow-hidden bg-[#1c386f] p-12 text-white lg:flex lg:w-1/2">
+    <div class="bg-sidebar text-foreground relative hidden flex-col justify-between overflow-hidden p-12 lg:flex lg:w-1/2">
       <!-- Tech background -->
       <div class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <div class="tech-lines absolute inset-0"></div>
@@ -39,60 +39,60 @@ async function handleLogin() {
             <path d="M7 16.5l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.6" stroke-linecap="round" stroke-linejoin="round" />
             <path d="M7 20l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.35" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
-          <span class="text-xl font-semibold">应用运营门户 <span class="text-red-600">POC</span></span>
+          <span class="text-foreground text-xl font-semibold">应用运营门户 <span class="text-red-600">POC</span></span>
         </div>
       </div>
 
       <div class="relative z-10 space-y-10">
         <div class="space-y-4">
           <h1 class="text-4xl leading-tight font-bold">智信 MaaS 应用运营门户 <span class="text-red-600">POC</span></h1>
-          <p class="max-w-md text-lg leading-relaxed text-white/70">一站式企业应用运营管理解决方案，以安全为基，以高效为纲，赋能企业数字化升级。</p>
+          <p class="text-foreground/70 max-w-md text-lg leading-relaxed">一站式企业应用运营管理解决方案，以安全为基，以高效为纲，赋能企业数字化升级。</p>
         </div>
 
         <div class="space-y-6">
           <div class="flex items-start gap-4">
-            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/10">
-              <ChartBarIcon class="h-5 w-5 text-white" />
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#3841D8]/10">
+              <ChartBarIcon class="h-5 w-5 text-[#3841D8]" />
             </div>
             <div>
               <p class="text-base font-medium">数据可视化分析</p>
-              <p class="mt-1 text-sm text-white/60">多维度运营数据统计，实时监控业务指标</p>
+              <p class="text-foreground/60 mt-1 text-sm">多维度运营数据统计，实时监控业务指标</p>
             </div>
           </div>
 
           <div class="flex items-start gap-4">
-            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/10">
-              <ShieldCheckIcon class="h-5 w-5 text-white" />
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#3841D8]/10">
+              <ShieldCheckIcon class="h-5 w-5 text-[#3841D8]" />
             </div>
             <div>
               <p class="text-base font-medium">安全合规审计</p>
-              <p class="mt-1 text-sm text-white/60">全流程操作日志记录，满足企业合规审查要求</p>
+              <p class="text-foreground/60 mt-1 text-sm">全流程操作日志记录，满足企业合规审查要求</p>
             </div>
           </div>
 
           <div class="flex items-start gap-4">
-            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/10">
-              <Cog6ToothIcon class="h-5 w-5 text-white" />
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#3841D8]/10">
+              <Cog6ToothIcon class="h-5 w-5 text-[#3841D8]" />
             </div>
             <div>
               <p class="text-base font-medium">全生命周期管理</p>
-              <p class="mt-1 text-sm text-white/60">从订购到运维，覆盖应用运营全流程需求</p>
+              <p class="text-foreground/60 mt-1 text-sm">从订购到运维，覆盖应用运营全流程需求</p>
             </div>
           </div>
 
           <div class="flex items-start gap-4">
-            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/10">
-              <DocumentTextIcon class="h-5 w-5 text-white" />
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#3841D8]/10">
+              <DocumentTextIcon class="h-5 w-5 text-[#3841D8]" />
             </div>
             <div>
               <p class="text-base font-medium">账单与报表</p>
-              <p class="mt-1 text-sm text-white/60">透明账单明细，支持按月导出报表，开票便捷</p>
+              <p class="text-foreground/60 mt-1 text-sm">透明账单明细，支持按月导出报表，开票便捷</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="relative z-10 text-sm text-white/40">© 2026 中信国际电讯 版权所有</div>
+      <div class="text-foreground/40 relative z-10 text-sm">© 2026 中信国际电讯 版权所有</div>
     </div>
 
     <!-- Right Panel: White background, login form -->
@@ -147,12 +147,12 @@ async function handleLogin() {
 
 <style scoped>
 .tech-lines {
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-image: linear-gradient(to right, rgba(181, 184, 199, 0.2) 1px, /* 浅灰蓝线条，比字体浅 */ transparent 1px), linear-gradient(to bottom, rgba(181, 184, 199, 0.2) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
 .tech-scan {
-  background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.03) 30%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.03) 70%, transparent 100%);
+  background: linear-gradient(to bottom, transparent 0%, rgba(192, 195, 214, 0.06) 30%, /* 更浅的灰蓝过渡 */ rgba(192, 195, 214, 0.18) 50%, /* 主扫描条，亮灰蓝 */ rgba(192, 195, 214, 0.06) 70%, transparent 100%);
   animation: techScan 3s linear infinite;
 }
 

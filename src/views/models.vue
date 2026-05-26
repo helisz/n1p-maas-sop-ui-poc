@@ -778,10 +778,9 @@ const computedPremium = computed(() => {
           <DialogDescription>配置新模型的基本信息、分级定价与限流策略</DialogDescription>
         </DialogHeader>
         <Tabs v-model="createTab" class="w-full">
-          <TabsList class="grid w-full grid-cols-3">
+          <TabsList class="grid w-full grid-cols-2">
             <TabsTrigger value="basic">基础信息</TabsTrigger>
             <TabsTrigger value="pricing">定价与成本</TabsTrigger>
-            <TabsTrigger value="limit">限流策略</TabsTrigger>
           </TabsList>
 
           <!-- Basic Info Tab -->
@@ -883,50 +882,6 @@ const computedPremium = computed(() => {
               </div>
             </div>
 
-            <!-- 高级版 - calculated display -->
-            <div class="border-border bg-muted/20 rounded-lg border p-3">
-              <div class="mb-3 flex items-center gap-2">
-                <span :class="['rounded px-2 py-0.5 text-xs font-medium', tierBadgeClasses['advanced']]">高级版</span>
-                <span class="text-muted-foreground text-xs">基础价 × 0.9</span>
-              </div>
-              <div class="grid grid-cols-3 gap-3">
-                <div class="space-y-1.5">
-                  <Label class="text-muted-foreground text-xs">Input Price</Label>
-                  <p class="font-mono text-sm font-semibold">{{ formatPrice(computedAdvanced.input) }}</p>
-                </div>
-                <div class="space-y-1.5">
-                  <Label class="text-muted-foreground text-xs">Output Price</Label>
-                  <p class="font-mono text-sm font-semibold">{{ formatPrice(computedAdvanced.output) }}</p>
-                </div>
-                <div class="space-y-1.5">
-                  <Label class="text-muted-foreground text-xs">Cache Read</Label>
-                  <p class="font-mono text-sm font-semibold">{{ formatPrice(computedAdvanced.cacheRead) }}</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- 尊享版 - calculated display -->
-            <div class="border-border bg-muted/20 rounded-lg border p-3">
-              <div class="mb-3 flex items-center gap-2">
-                <span :class="['rounded px-2 py-0.5 text-xs font-medium', tierBadgeClasses['premium']]">尊享版</span>
-                <span class="text-muted-foreground text-xs">基础价 × 0.8</span>
-              </div>
-              <div class="grid grid-cols-3 gap-3">
-                <div class="space-y-1.5">
-                  <Label class="text-muted-foreground text-xs">Input Price</Label>
-                  <p class="font-mono text-sm font-semibold">{{ formatPrice(computedPremium.input) }}</p>
-                </div>
-                <div class="space-y-1.5">
-                  <Label class="text-muted-foreground text-xs">Output Price</Label>
-                  <p class="font-mono text-sm font-semibold">{{ formatPrice(computedPremium.output) }}</p>
-                </div>
-                <div class="space-y-1.5">
-                  <Label class="text-muted-foreground text-xs">Cache Read</Label>
-                  <p class="font-mono text-sm font-semibold">{{ formatPrice(computedPremium.cacheRead) }}</p>
-                </div>
-              </div>
-            </div>
-
             <!-- 成本价 -->
             <div class="border-border rounded-lg border p-3">
               <div class="mb-3 flex items-center gap-2">
@@ -952,37 +907,6 @@ const computedPremium = computed(() => {
             <div class="flex justify-between">
               <Button variant="outline" @click="createTab = 'basic'"><ChevronLeftIcon class="mr-1 h-4 w-4" />上一步</Button>
               <Button variant="outline" @click="createTab = 'limit'">下一步 <ChevronRightIcon class="ml-1 h-4 w-4" /></Button>
-            </div>
-          </TabsContent>
-
-          <!-- Rate Limiting Tab -->
-          <TabsContent value="limit" class="space-y-4 pt-2">
-            <div class="space-y-2">
-              <Label for="model-status">初始状态</Label>
-              <Select v-model="createForm.status">
-                <SelectTrigger class="w-full">
-                  <SelectValue placeholder="选择状态" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="offline">下线</SelectItem>
-                  <SelectItem value="online">上线</SelectItem>
-                  <SelectItem value="maintenance">维护中</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-              <div class="space-y-2">
-                <Label for="model-rpm">RPM（请求/分钟）</Label>
-                <Input id="model-rpm" v-model="createForm.rpm" type="number" placeholder="10000" />
-              </div>
-              <div class="space-y-2">
-                <Label for="model-tpm">TPM（Tokens/分钟）</Label>
-                <Input id="model-tpm" v-model="createForm.tpm" type="number" placeholder="1000000" />
-              </div>
-            </div>
-            <div class="flex justify-between pt-2">
-              <Button variant="outline" @click="createTab = 'pricing'"><ChevronLeftIcon class="mr-1 h-4 w-4" />上一步</Button>
-              <Button @click="handleCreateModel">确认接入</Button>
             </div>
           </TabsContent>
         </Tabs>

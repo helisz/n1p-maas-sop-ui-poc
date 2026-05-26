@@ -91,7 +91,7 @@ function navigate(href: string) {
           <path d="M7 16.5l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.6" stroke-linecap="round" stroke-linejoin="round" />
           <path d="M7 20l9 5.5 9-5.5" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.35" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
-        <span v-if="!collapsed" class="text-foreground text-sm font-semibold tracking-tight whitespace-nowrap">企业统一服务门户 <span class="text-red-600">POC</span></span>
+        <span v-if="!collapsed" class="text-foreground text-sm font-semibold tracking-tight whitespace-nowrap">应用运营门户 <span class="text-red-600">POC</span></span>
       </div>
       <button v-if="!collapsed" class="text-muted-foreground hover:text-foreground hover:bg-accent flex h-7 w-7 items-center justify-center rounded-md transition-colors lg:hidden" @click="emit('close')">
         <XMarkIcon class="h-4 w-4" />
