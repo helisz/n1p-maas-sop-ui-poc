@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useRoute } from 'vue-router';
-
 // Explicitly import layout components to resolve dynamic string names accurately
 import PortalLayout from '@/layouts/PortalLayout.vue';
 

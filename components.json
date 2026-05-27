@@ -19,9 +19,5 @@
     "lib": "@/lib",
     "composables": "@/composables"
   },
-  "registries": {
-    "@radix-vue": {
-      "url": "https://radix-vue.com/registry/{name}.json"
-    }
-  }
+  "registries": {}
 }

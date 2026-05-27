@@ -736,7 +736,7 @@ const computedPremium = computed(() => {
       </CardHeader>
 
       <CardContent>
-        <DataTable :columns="columns" :data="filteredModels" enable-pagination enable-column-resizing enableColumnPinning>
+        <DataTable :columns="columns" :data="filteredModels" enable-column-resizing>
           <template #cell-tags="{ row }">
             <div class="flex flex-wrap gap-1">
               <Badge v-for="tag in row.original.tags" :key="tag" variant="secondary" class="text-[10px]">{{ tag }}</Badge>

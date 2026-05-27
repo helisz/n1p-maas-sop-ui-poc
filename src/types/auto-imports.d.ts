@@ -6,8 +6,21 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const $approveCertification: typeof import('../apis/acc/enterprises/$approveCertification').$approveCertification
+  const $freezeEnterprise: typeof import('../apis/acc/enterprises/$freezeEnterprise').$freezeEnterprise
+  const $getAdminProfile: typeof import('../apis/acc/$getAdminProfile').$getAdminProfile
+  const $getEnterpriseDetail: typeof import('../apis/acc/enterprises/$getEnterpriseDetail').$getEnterpriseDetail
+  const $listAccounts: typeof import('../apis/acc/$listAccounts').$listAccounts
+  const $listEnterprises: typeof import('../apis/acc/enterprises/$listEnterprises').$listEnterprises
+  const $login: typeof import('../apis/acc/$login').$login
+  const $logout: typeof import('../apis/acc/$logout').$logout
+  const $transferOwner: typeof import('../apis/acc/enterprises/$transferOwner').$transferOwner
+  const $unfreezeEnterprise: typeof import('../apis/acc/enterprises/$unfreezeEnterprise').$unfreezeEnterprise
+  const $updateAdminProfile: typeof import('../apis/acc/$updateAdminProfile').$updateAdminProfile
   const EffectScope: typeof import('vue').EffectScope
   const acceptHMRUpdate: typeof import('pinia').acceptHMRUpdate
+  const adminLogin: typeof import('../apis/auth').adminLogin
+  const adminLogout: typeof import('../apis/auth').adminLogout
   const apiFetch: typeof import('../plugins/http-client').apiFetch
   const computed: typeof import('vue').computed
   const createApp: typeof import('vue').createApp
@@ -17,6 +30,7 @@ declare global {
   const defineComponent: typeof import('vue').defineComponent
   const defineStore: typeof import('pinia').defineStore
   const effectScope: typeof import('vue').effectScope
+  const formatDateTime: typeof import('../utils/format').formatDateTime
   const getActivePinia: typeof import('pinia').getActivePinia
   const getCurrentInstance: typeof import('vue').getCurrentInstance
   const getCurrentScope: typeof import('vue').getCurrentScope
@@ -55,6 +69,7 @@ declare global {
   const reactive: typeof import('vue').reactive
   const readonly: typeof import('vue').readonly
   const ref: typeof import('vue').ref
+  const register: typeof import('../apis/auth').register
   const resolveComponent: typeof import('vue').resolveComponent
   const setActivePinia: typeof import('pinia').setActivePinia
   const setMapStoreSuffix: typeof import('pinia').setMapStoreSuffix
@@ -63,6 +78,7 @@ declare global {
   const shallowRef: typeof import('vue').shallowRef
   const storeToRefs: typeof import('pinia').storeToRefs
   const streamFetch: typeof import('../plugins/http-client').streamFetch
+  const toFormData: typeof import('../utils/toFormData').toFormData
   const toRaw: typeof import('vue').toRaw
   const toRef: typeof import('vue').toRef
   const toRefs: typeof import('vue').toRefs
@@ -79,6 +95,8 @@ declare global {
   const useRouter: typeof import('vue-router').useRouter
   const useSlots: typeof import('vue').useSlots
   const useTemplateRef: typeof import('vue').useTemplateRef
+  const userLogin: typeof import('../apis/auth').userLogin
+  const userLogout: typeof import('../apis/auth').userLogout
   const watch: typeof import('vue').watch
   const watchEffect: typeof import('vue').watchEffect
   const watchPostEffect: typeof import('vue').watchPostEffect
@@ -89,6 +107,9 @@ declare global {
   // @ts-ignore
   export type { Component, Slot, Slots, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, ShallowRef, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
   import('vue')
+  // @ts-ignore
+  export type { PageResult, LoginRequest, LoginResponse, AccountDTO, UpdateAccountRequest, AccountListItemDTO, ListAccountRequest, EnterpriseDTO, ListEnterpriseRequest, ApproveCertificationRequest, TransferOwnerRequest } from '../apis/types'
+  import('../apis/types')
   // @ts-ignore
   export type { ApiResponseSchema, ApiErrorSchema } from '../plugins/http-client'
   import('../plugins/http-client')
