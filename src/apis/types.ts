@@ -58,6 +58,18 @@ export interface ListAccountRequest {
   size?: number;
 }
 
+// [AI_START TIMESTAMP=2025-07-21 11:30:00]
+export interface AccountStatisticsDTO {
+  totalUsers: number;
+  adminCount: number;
+  userCount: number;
+  subUserCount: number;
+  activeCount: number;
+  frozenCount: number;
+  disabledCount: number;
+}
+// [AI_END LINES=10 TIMESTAMP=2025-07-21 11:30:00]
+
 // ==================== 企業相關 ====================
 
 export interface EnterpriseDTO {
@@ -91,12 +103,33 @@ export interface ListEnterpriseRequest {
   size?: number;
 }
 
-// ==================== 認證審批 ====================
+// ==================== 審計日誌 ====================
 
-export interface ApproveCertificationRequest {
-  status: string;
-  remark?: string;
+// [AI_START TIMESTAMP=2025-07-21 11:30:00]
+export interface AuditLogDTO {
+  auditId: number;
+  operationTime: string;
+  operationType: string;
+  operationContent: string;
+  accountId: number;
+  username: string;
+  ipAddress: string;
+  authType: string;
+  detail: string;
+  remark: string;
+  createdAt: string;
 }
+
+export interface ListAuditLogRequest {
+  page?: number;
+  size?: number;
+  operationType?: string;
+  username?: string;
+  ipAddress?: string;
+  operationTimeStart?: string;
+  operationTimeEnd?: string;
+}
+// [AI_END LINES=24 TIMESTAMP=2025-07-21 11:30:00]
 
 // ==================== 轉移所有者 ====================
 

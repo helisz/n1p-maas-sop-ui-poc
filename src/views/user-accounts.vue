@@ -8,75 +8,52 @@ definePage({
 });
 
 import { createColumnHelper } from '@tanstack/vue-table';
-import { MagnifyingGlassIcon, UserIcon, EnvelopeIcon, BuildingOffice2Icon, ClockIcon, PencilSquareIcon, KeyIcon, NoSymbolIcon, CheckCircleIcon } from '@heroicons/vue/24/outline';
-
-// [AI_START TIMESTAMP=2025-07-21 10:30:00]
+import { MagnifyingGlassIcon, UserIcon, BuildingOffice2Icon, ClockIcon, PencilSquareIcon, KeyIcon, NoSymbolIcon, CheckCircleIcon } from '@heroicons/vue/24/outline';
 import { formatDateTime } from '@/utils/format';
 
-// [AI_START TIMESTAMP=2025-07-21 11:00:00]
 const ACCOUNT_TYPE_MAP: Record<string, { label: string; badgeClass: string }> = {
   USER: { label: '普通用户', badgeClass: 'bg-blue-50 text-blue-700 border-blue-200' },
   ADMIN: { label: '管理员', badgeClass: 'bg-amber-50 text-amber-700 border-amber-200' },
 };
-// [AI_END LINES=5 TIMESTAMP=2025-07-21 11:00:00]
+const DEFAULT_STATISTICS: AccountStatisticsDTO = { totalUsers: 0, adminCount: 0, userCount: 0, subUserCount: 0, activeCount: 0, frozenCount: 0, disabledCount: 0 };
 
-const loading = ref(false);
+const statistics = await $getAccountStatistics().catch(() => DEFAULT_STATISTICS);
+
 const keyword = ref('');
-const accounts = ref<AccountListItemDTO[]>([]);
-const total = ref(0);
-const size = ref(10);
+const searchKeyword = ref('');
 
-async function fetchAccounts() {
-  loading.value = true;
-  try {
-    const res = await $listAccounts({
-      keyword: keyword.value || undefined,
-    });
-    accounts.value = res.records;
-    total.value = res.total;
-    size.value = res.size;
-  } catch {
-    // error handled by http-client
-  } finally {
-    loading.value = false;
-  }
-}
+const accountFetcher = async (params: any) => {
+  const res = await $listAccounts({
+    keyword: params.keyword || undefined,
+    page: params.page,
+    size: params.pageSize,
+  });
+  return res;
+};
 
-function handleSearch() {
-  fetchAccounts();
-}
-
-onMounted(() => {
-  fetchAccounts();
-});
-
-// Stats
-const stats = computed(() => ({
-  total: total.value,
-  superAdmin: '-',
-  admin: '-',
-  disabled: '-',
+const fetchExtraParams = computed(() => ({
+  keyword: searchKeyword.value || undefined,
 }));
 
-// DataTable columns
+function handleSearch() {
+  searchKeyword.value = keyword.value;
+}
+
 const columnHelper = createColumnHelper<AccountListItemDTO>();
 
 const columns = [
   columnHelper.accessor('accountId', {
     header: 'ID',
-    cell: ({ row }) => h('span', { class: 'text-muted-foreground font-mono text-sm' }, String(row.original.accountId)),
+    cell: ({ row }) => h('span', { class: 'text-muted-foreground text-sm' }, String(row.original.accountId)),
   }),
   columnHelper.accessor('username', {
     header: '用户名',
-    cell: ({ row }) => h('div', { class: 'font-medium' }, row.original.username),
   }),
   columnHelper.accessor('email', {
     header: '邮箱',
-    cell: ({ row }) => h('span', { class: 'text-sm' }, row.original.email),
   }),
   columnHelper.accessor('enterpriseName', {
     header: '所属企业',
-    cell: ({ row }) => h('span', { class: 'text-sm' }, row.original.enterpriseName || '-'),
   }),
   columnHelper.accessor('type', {
     header: '角色类型',
@@ -92,7 +69,6 @@ const columns = [
   columnHelper.display({
     id: 'actions',
     header: () => h('div', { class: 'text-right' }, '操作'),
-    cell: () => null,
     size: 180,
     meta: { pinned: 'right' },
   }),
@@ -121,7 +97,6 @@ function handleUnfreeze(account: AccountListItemDTO) {
   // TODO: 等待解冻 API 就绪后接入
   console.log('unfreeze account:', account.accountId);
 }
-// [AI_END LINES=120 TIMESTAMP=2025-07-21 10:30:00]
 </script>
 
 <template>
@@ -136,25 +111,25 @@ function handleUnfreeze(account: AccountListItemDTO) {
       <Card>
         <CardHeader class="pb-2"><CardTitle class="text-muted-foreground text-sm font-medium">总用户数</CardTitle></CardHeader>
         <CardContent
-          ><div class="text-2xl font-bold">{{ stats.total }}</div></CardContent
+          ><div class="text-2xl font-bold">{{ statistics.totalUsers }}</div></CardContent
         >
       </Card>
       <Card>
         <CardHeader class="pb-2"><CardTitle class="text-muted-foreground text-sm font-medium">管理员</CardTitle></CardHeader>
         <CardContent
-          ><div class="text-2xl font-bold text-blue-600">{{ stats.superAdmin }}</div></CardContent
+          ><div class="text-2xl font-bold text-blue-600">{{ statistics.adminCount }}</div></CardContent
         >
       </Card>
       <Card>
         <CardHeader class="pb-2"><CardTitle class="text-muted-foreground text-sm font-medium">普通用户</CardTitle></CardHeader>
         <CardContent
-          ><div class="text-2xl font-bold text-amber-600">{{ stats.admin }}</div></CardContent
+          ><div class="text-2xl font-bold text-amber-600">{{ statistics.userCount }}</div></CardContent
         >
       </Card>
       <Card>
         <CardHeader class="pb-2"><CardTitle class="text-muted-foreground text-sm font-medium">已冻结</CardTitle></CardHeader>
         <CardContent
-          ><div class="text-2xl font-bold text-red-600">{{ stats.disabled }}</div></CardContent
+          ><div class="text-2xl font-bold text-red-600">{{ statistics.frozenCount }}</div></CardContent
         >
       </Card>
     </div>
@@ -166,7 +141,7 @@ function handleUnfreeze(account: AccountListItemDTO) {
           <div class="flex items-center gap-2">
             <UserIcon class="text-primary h-5 w-5" />
             <CardTitle>用户列表</CardTitle>
-            <span class="text-muted-foreground text-sm font-normal">（共 {{ total }} 人）</span>
+            <span class="text-muted-foreground text-sm font-normal">（共 {{ statistics.totalUsers }} 人）</span>
           </div>
           <div class="flex flex-wrap items-center gap-3">
             <div class="relative">
@@ -179,9 +154,8 @@ function handleUnfreeze(account: AccountListItemDTO) {
       </CardHeader>
 
       <CardContent>
-        <div v-if="loading" class="text-muted-foreground py-8 text-center">加载中...</div>
         <!-- [AI_START TIMESTAMP=2025-07-21 16:00:00] -->
-        <DataTable v-else :columns="columns" :data="accounts" enable-pagination :page-size="size">
+        <DataTable ref="dataTableRef" :columns="columns" :fetch="accountFetcher" enable-pagination :fetch-params="fetchExtraParams">
           <template #cell-type="{ row }">
             <Badge variant="outline" :class="`text-xs ${ACCOUNT_TYPE_MAP[row.original.type]?.badgeClass || ''}`">
               {{ ACCOUNT_TYPE_MAP[row.original.type]?.label || row.original.type || '-' }}
@@ -275,4 +249,4 @@ function handleUnfreeze(account: AccountListItemDTO) {
     </Dialog>
   </div>
 </template>
-<!-- [AI_END LINES=290 TIMESTAMP=2025-07-21 16:00:00] -->
+<!-- [AI_END LINES=280 TIMESTAMP=2025-07-21 17:15:00] -->

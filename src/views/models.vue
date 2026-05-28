@@ -534,10 +534,6 @@ function formatContext(len: number) {
   return `${len}`;
 }
 
-function calcTierPrice(basic: number, ratio: number) {
-  return Number((basic * ratio).toFixed(4));
-}
-
 // Create model dialog
 const createOpen = ref(false);
 const createTab = ref('basic');
@@ -612,62 +608,6 @@ function openCreateDialog() {
   createTab.value = 'basic';
   createOpen.value = true;
 }
-
-function handleCreateModel() {
-  const inputB = Number(createForm.value.inputBasic) || 0;
-  const outputB = Number(createForm.value.outputBasic) || 0;
-  const cacheB = Number(createForm.value.cacheReadBasic) || 0;
-  const newModel: ModelItem = {
-    id: createForm.value.id || `model-${Date.now()}`,
-    name: createForm.value.name,
-    provider: createForm.value.provider,
-    description: createForm.value.description,
-    tags: createForm.value.tags,
-    modality: createForm.value.modality,
-    contextLength: Number(createForm.value.contextLength) || 0,
-    maxOutput: Number(createForm.value.maxOutput) || 0,
-    capabilities: createForm.value.capabilities,
-    status: createForm.value.status as 'online' | 'maintenance' | 'offline',
-    pricing: {
-      basic: { input: inputB, output: outputB, cacheRead: cacheB },
-      advanced: { input: calcTierPrice(inputB, 0.9), output: calcTierPrice(outputB, 0.9), cacheRead: calcTierPrice(cacheB, 0.9) },
-      premium: { input: calcTierPrice(inputB, 0.8), output: calcTierPrice(outputB, 0.8), cacheRead: calcTierPrice(cacheB, 0.8) },
-    },
-    costPrice: {
-      input: Number(createForm.value.inputCost) || 0,
-      output: Number(createForm.value.outputCost) || 0,
-      cacheRead: Number(createForm.value.cacheReadCost) || 0,
-    },
-    calls: 0,
-    rpm: Number(createForm.value.rpm) || 0,
-    tpm: Number(createForm.value.tpm) || 0,
-  };
-  models.value.unshift(newModel);
-  createOpen.value = false;
-}
-
-// Computed pricing display for create dialog
-const computedAdvanced = computed(() => {
-  const inputB = Number(createForm.value.inputBasic) || 0;
-  const outputB = Number(createForm.value.outputBasic) || 0;
-  const cacheB = Number(createForm.value.cacheReadBasic) || 0;
-  return {
-    input: calcTierPrice(inputB, 0.9),
-    output: calcTierPrice(outputB, 0.9),
-    cacheRead: calcTierPrice(cacheB, 0.9),
-  };
-});
-
-const computedPremium = computed(() => {
-  const inputB = Number(createForm.value.inputBasic) || 0;
-  const outputB = Number(createForm.value.outputBasic) || 0;
-  const cacheB = Number(createForm.value.cacheReadBasic) || 0;
-  return {
-    input: calcTierPrice(inputB, 0.8),
-    output: calcTierPrice(outputB, 0.8),
-    cacheRead: calcTierPrice(cacheB, 0.8),
-  };
-});
 </script>
 
 <template>

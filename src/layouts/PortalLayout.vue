@@ -3,6 +3,7 @@
 import { ArrowPathIcon } from '@heroicons/vue/24/outline';
 import { useAuthStore } from '@/stores/auth';
 
+const route = useRoute();
 const router = useRouter();
 const auth = useAuthStore();
 
@@ -26,9 +27,20 @@ watch(
     <Sidebar />
     <div class="flex flex-1 flex-col overflow-hidden">
       <Header />
+      <!-- [AI_START TIMESTAMP=2025-07-22 11:00:00] -->
       <main class="bg-muted/30 flex-1 overflow-y-auto p-6">
-        <slot />
+        <Suspense :timeout="0">
+          <template #default>
+            <div :key="route.fullPath">
+              <slot />
+            </div>
+          </template>
+          <template #fallback>
+            <PageSkeleton />
+          </template>
+        </Suspense>
       </main>
+      <!-- [AI_END LINES=12 TIMESTAMP=2025-07-22 11:00:00] -->
     </div>
   </div>
 </template>
