@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --mode dev",
-    "build:dev": "vue-tsc -b && vite build --mode dev",
+    "build": "vue-tsc -b && vite build --mode dev",
     "build:prod": "vue-tsc -b && vite build --mode production",
     "preview": "vite preview",
     "format": "prettier --write \"src/**/*.{vue,ts,js,css,html}\""
